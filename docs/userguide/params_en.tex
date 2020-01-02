@@ -26,6 +26,11 @@ Variable names must consist of alphanumeric characters and are not case-sensitiv
 
 Variables which are neither global user variables nor built-in types, will be replaced with a value provided in the project file, or with an environment variable if the latter should fail.
 
+The use of these variables can follow the following example for the date :
+
+\codeline{#include "include/manager.h"} \\
+\codeline{wxString strdate = Manager::Get()->GetMacrosManager()->ReplaceMacros(_T("$TODAY"));}
+
 \hint{Per-target definitions have precedence over per-project definitions.}
 
 \section{List of available built-ins}\label{sec:builtin_variables}
@@ -44,8 +49,8 @@ The variables listed here are built-in variables of \codeblocks. They cannot be 
 
 \begin{codeentry}
 \item[\$(PROJECT\_FILENAME), \$(PROJECT\_FILE\_NAME), \$(PROJECT\_FILE), \$(PROJECTFILE)] The filename of the currently compiled project.
-\item[\$(PROJECT\_NAME)] The name of the currently compiled project.
-\item[\$(PROJECT\_DIR), \$(PROJECTDIR), \$(PROJECT\_DIRECTORY)] The common top-level directory of the currently compiled project.
+\item[\$(PROJECT\_NAME), \$(PROJECTNAME)] The name of the currently compiled project.
+\item[\$(PROJECT\_DIR), \$(PROJECTDIR), \$(PROJECT\_DIRECTORY), \$(PROJECTDIRECTORY)] The common top-level directory of the currently compiled project.
 \item[\$(ACTIVE\_EDITOR\_FILENAME)] The filename of the file opened in the currently active editor.
 \item[\$(ACTIVE\_EDITOR\_LINE)] Return the current line in the active editor.
 \item[\$(ACTIVE\_EDITOR\_COLUMN] Return the column of the current line in the active editor.
@@ -62,16 +67,20 @@ The variables listed here are built-in variables of \codeblocks. They cannot be 
 
 \subsection{Build targets}
 
+replace FOOBAR with the target name 
+
 \begin{codeentry}
 \item[\$(FOOBAR\_OUTPUT\_FILE)] The output file of a specific target.
 \item[\$(FOOBAR\_OUTPUT\_DIR)] The output directory of a specific target.
 \item[\$(FOOBAR\_OUTPUT\_BASENAME)] The output file's base name (no path, no extension) of a specific target.
+\item[\$(FOOBAR\_PARAMETERS)] A specific target's execution parameters
 \item[\$(TARGET\_OUTPUT\_DIR)] The output directory of the current target.
 \item[\$(TARGET\_OBJECT\_DIR)] The object directory of the current target.
 \item[\$(TARGET\_NAME)] The name of the current target.
 \item[\$(TARGET\_OUTPUT\_FILE)] The output file of the current target.
 \item[\$(TARGET\_OUTPUT\_BASENAME)] The output file's base name (no path, no extension) of the current target.
 \item[\$(TARGET\_CC), \$(TARGET\_CPP), \$(TARGET\_LD), \$(TARGET\_LIB)] The build tool executable (compiler, linker, etc) of the current target.
+\item[\$(TARGET\_COMPILER\_DIR)] The current target's build tool directory (compiler, linker, etc).
 \end{codeentry}
 
 \subsection{Language and encoding}
@@ -87,10 +96,27 @@ The variables listed here are built-in variables of \codeblocks. They cannot be 
 \item[\$(TDAY)] Current date in the form YYYYMMDD (for example 20051228)
 \item[\$(TODAY)] Current date in the form YYYY-MM-DD (for example 2005-12-28)
 \item[\$(NOW)] Timestamp in the form YYYY-MM-DD-hh.mm (for example 2005-12-28-07.15)
-\item[\$(NOW\_L)]] Timestamp in the form YYYY-MM-DD-hh.mm.ss (for example 2005-12-28-07.15.45)
+\item[\$(NOW\_L)] Timestamp in the form YYYY-MM-DD-hh.mm.ss (for example 2005-12-28-07.15.45)
 \item[\$(WEEKDAY)]  Plain language day of the week (for example \samp{Wednesday})
 \item[\$(TDAY\_UTC), \$(TODAY\_UTC), \$(NOW\_UTC), \$(NOW\_L\_UTC), \$(WEEKDAY\_UTC)] These are identical to the preceding types, but are expressed relative to UTC.
 \item[\$(DAYCOUNT)] The number of the days passed since an arbitrarily chosen day zero (January 1, 2009). Useful as last component of a version/build number.
+\end{codeentry}
+
+\subsection{Platform dependence}
+
+\begin{codeentry}
+\item[\$(PLATFORM)] Expands to msw on windows and unix on linux and mac (Since revision r11793) 
+\end{codeentry}
+
+\subsection{Command line expansions}
+This commands can be used in the command line for the specific platform. 
+\begin{codeentry}
+\item[\$(CMD\_CP)] Will expand to a copy command for the specific platform. (on windows \codeline{copy} and on unix \codeline{cp --preserve=timestamps}) 
+\item[\$(CMD\_RM)] delete command
+\item[\$(CMD\_MV)] move command
+\item[\$(CMD\_NULL)] NULL device (for redirecting streams)
+\item[\$(CMD\_MKDIR)] create a directory
+\item[\$(CMD\_RMDIR)] delete a directory
 \end{codeentry}
 
 \subsection{Random values}
@@ -100,16 +126,29 @@ The variables listed here are built-in variables of \codeblocks. They cannot be 
 \item[\$(RANDOM)] A 16-bit positive random number (0-65535)
 \end{codeentry}
 
-\subsection{Operating System Commands}
-
-The variable are substituted through the command of the operating system.
+\subsection{Standard path}
 
 \begin{codeentry}
-\item[\$(CMD\_CP)] Copy command for files.
-\item[\$(CMD\_RM)] Remove command for files.
-\item[\$(CMD\_MV)] Move command for files.
-\item[\$(CMD\_MKDIR)] Make directory command.
-\item[\$(CMD\_RMDIR)] Remove directory command.
+\item[\$(GET\_DATA\_DIR)] Unix: prefix/share/appname Windows: EXE path
+\item[\$(GET\_LOCAL\_DATA\_DIR)] Unix: /etc/appname Windows: EXE path
+\item[\$(GET\_CONFIG\_DIR)] Unix: /etc Windows: \file{C:\osp Documents and Settings\osp All Users\osp Application Data}
+\item[\$(GET\_USER\_CONFIG\_DIR)] Unix: ~ Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data\osp appname}
+\item[\$(GET\_USER\_DATA\_DIR)] Unix: ~/.appname Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data}
+\item[\$(GET\_USER\_LOCAL\_DATA\_DIR)] Unix: ~/.appname Windows: \file{C:\osp Documents and Settings\osp username\osp Local Settings\osp Application Data\osp appname}
+\item[\$(GET\_TEMP\_DIR)] ALL platforms: A writable, temporary directory
+\end{codeentry}
+
+\subsection{Build in functions for path conversion}
+There are build in macro functions to simplify path generation 
+\begin{codeentry}
+\item[\$TO\_UNIX\_PATH\{\}] convert path to unix path (use '/' as separator)
+\item[\$TO\_WINDOWS\_PATH\{\}] convert path to windows (use '\osp' as separator)
+\item[\$TO\_NATIVE\_PATH\{\}] convert to native path form the codeblocks instance is running on
+\end{codeentry}
+
+\textbf{Usage}
+\begin{codeentry}
+\item[\$TO\_UNIX\_PATH\{\$(TARGET\_OUTPUT\_FILE)\}] returns the current target output file as unix path
 \end{codeentry}
 
 \subsection{Conditional Evaluation}
@@ -138,15 +177,16 @@ Conditional evaluation will resolve to its false clause if
 
 \genterm{Example}
 
-For example if you are using several platforms and you want to set different parameters depending on the operating system. In the following code the script commands of \codeline{[[ ]]} are evaluated and the \var{command} will be executed. This could be useful in a post-built step.
+For example if you are using several platforms and you want to set different parameters depending on the operating system. In the following code the script commands of \codeline{[[ ]]} are evaluated and the \var{command} will be executed. This could be useful in a post-built step (on a single line).
 
 \begin{code}
-[[ if (PLATFORM ==  PLATFORM_MSW) { print (_T("cmd /c")); } else { print (_T("sh ")); } ]] <command>
+[[ if (PLATFORM ==  PLATFORM_MSW) { print (_T("cmd /c")); } else
+      { print (_T("sh ")); } ]] <command>
 \end{code}
 
 \section{Script expansion}
 
-For maximum flexibility, you can embed scripts using the \codeline{[[ ]]} operator as a special case of variable expansion. Embedded scripts have access to all standard functionalities available to scrips and work pretty much like bash backticks (except for having access to \codeblocks namespace). As such, scripts are not limited to producing text output, but can also manipulate \codeblocks state (projects, targets, etc.).
+For maximum flexibility, you can embed scripts using the \codeline{[[ ]]} operator as a special case of variable expansion. Embedded scripts have access to all standard functionalities available to scripts and work pretty much like bash backticks (except for having access to \codeblocks namespace). As such, scripts are not limited to producing text output, but can also manipulate \codeblocks state (projects, targets, etc.).
 
 \hint{Manipulating \codeblocks state should be implemented rather with a pre-build script than with a script.}
 
@@ -200,18 +240,21 @@ $compiler $options $includes -c $file -o $object
 \section{Link object files to executable}
 
 \begin{code}
-$linker $libdirs -o $exe_output $link_objects $link_resobjects $link_options $libs
+$linker $libdirs -o $exe_output $link_objects $link_resobjects 
+$link_options $libs
 \end{code}
 
 \section{Global compiler variables}\label{sec:global_variables}
 
-\section{Synopsis}
+This section describes how to work with global variables.
+
+\subsection{Synopsis}
 
 Working as a developer on a project which relies on 3rd party libraries involves a lot of unnecessary repetitive tasks, such as setting up build variables according to the local file system layout. In the case of project files, care must be taken to avoid accidentially committing a locally modified copy. If one does not pay attention, this can happen easily for example after changing a build flag to make a release build.
 
 The concept of global compiler variables is a unique new solution for \codeblocks which addresses this problem. Global compiler variables allow you to set up a project once, with any number of developers using any number of different file system layouts being able to compile and develop this project. No local layout information ever needs to be changed more than once.
 
-\section{Names and Members}
+\subsection{Names and Members}
 
 Global compiler variables in \codeblocks are discriminated from per-project variables by a leading hash sign. Global compiler variables are structured; every variable consists of a name and an optional member. Names are freely definable, while some of the members are built into the IDE. Although you can choose anything for a variable name in principle, it is advisable to pick a known identifier for common packages. Thus the amount of information that the user needs to provide is minimised. The \codeblocks team provides a list of recommended variables for known packages.
 
@@ -223,8 +266,8 @@ It is generally recommended to use the syntax \codeline{$(#variable.include)} in
 
 The members \codeline{cflags} and \codeline{lflags} are empty by default and can be used to provide the ability to feed the same consistent set of compiler/linker flags to all builds on one machine. \codeblocks allows you to define custom variable members in addition to the built-in ones.
 
-\screenshot{gcv_ui}{Global Variable Environment}
-\section{Constraints}
+\figures[H][width=.8\columnwidth]{gcv_ui}{Global Variable Environment}
+\subsection{Constraints}
 
 \begin{itemize}
 \item Both set and global compiler variable names may not be empty, they must not contain white space, must start with a letter and must consist of alphanumeric characters. Cyrillic or Chinese letters are not alphanumeric characters. If \codeblocks is given invalid character sequences as names, it might replace them without asking.
@@ -246,7 +289,7 @@ Defining \codeline{wx.include} as \codeline{$(#wx)/include} is redundant, but pe
 Defining \codeline{wx.include} as \codeline{$(#wx.include)} is illegal and will be detected by \codeblocks
 Defining \codeline{wx.include} as \codeline{$(#cb.lib)} which again is defined as \codeline{$(#wx.include)} will create an infinite loop
 
-\section{Using Global Compiler Variables}
+\subsection{Using Global Compiler Variables}
 
 All you need to do for using global compiler variables is to put them in your project! Yes, it's that easy.
 
@@ -261,7 +304,7 @@ If you need to modify or delete a variable at a later time, you can do so from t
 
 The above image shows both per-project and global variables. \codeline{WX_SUFFIX} is defined in the project, but \codeline{WX} is a global user variable.
 
-\section{Variable Sets}
+\subsection{Variable Sets}
 
 Sometimes, you want to use different versions of the same library, or you develop two branches of the same program. Although it is possible to get along with a global compiler variable, this can become tedious. For such a purpose, \codeblocks supports variable sets. A variable set is an independent collection of variables identified by a name (set names have the same constraints as variable names).
 
@@ -277,6 +320,6 @@ As stated above, writing \codeline{$(#var.include)} and \codeline{$(#var)/includ
 
 Let's take a standard Boost installation under Windows for an example. Generally, you would expect a fictional package ACME to have its include files under ACME/include and its libraries under ACME/lib. Optionally, it might place its headers into yet another subfolder called acme. So after adding the correct paths to the compiler and linker options, you would expect to \codeline{\#include <acme/acme.h>} and link to \file{libacme.a} (or whatever it happens to be).
 
-% Boost, however, installs headers into C:\Boost\include\boost-1_33_1\boost and its libraries under C:\Boost\lib by default. It seems impossible to get this under one hood without having to adjust everything on every new PC, especially if you have to work under Linux or some other OS, too.
-%
-% This is where the true power of global user variables is unveiled. When defining the value of the #boost variable, you go one step further than usual. You define the member include as C:\Boost\include\boost-1_33_1\boost and the member lib as C:\Boost\lib, respectively. Your projects using $(#boost.include) and $(#boost.lib) will magically work on every PC without any modifications. You don't need to know why, you don't want to know why.
+Boost, however, installs headers into \file{C:\osp Boost\osp include\osp boost-1\_33\_1\osp boost} and its libraries under \file{C:\osp Boost\osp lib} by default. It seems impossible to get this under one hood without having to adjust everything on every new PC, especially if you have to work under Linux or some other OS, too.
+
+This is where the true power of global user variables is unveiled. When defining the value of the \codeline{#boost} variable, you go one step further than usual. You define the member include as \file{C:\osp Boost\osp include\osp boost-1\_33\_1\osp boost} and the member lib as \file{C:\osp Boost\osp lib}, respectively. Your projects using \codeline{$(#boost.include)} and \codeline{$(#boost.lib)} will magically work on every PC without any modifications. You don't need to know why, you don't want to know why.

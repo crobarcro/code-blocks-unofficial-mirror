@@ -1,16 +1,16 @@
 % Version of Document Management
 % $Name:  $
 
-\def\newcharencode{utf8}% set character encoding
-\input{booleans}% boolean declaration
-\setboolean{urlreg}{true}% for url catalogue
-\setboolean{bibreg}{false}% for bibliography
-\setboolean{indreg}{false}% for index generation
-\setboolean{shortdocu}{true}% oneside document
+\def\newcharencode{utf8}        % set character encoding
+\input{booleans}                % boolean declaration
+\setboolean{urlreg}{true}       % for url catalogue
+\setboolean{bibreg}{false}      % for bibliography
+\setboolean{indreg}{false}      % for index generation
+\setboolean{shortdocu}{true}    % oneside document
 
 %%%%% options %%%%%%%%%
 \def\lang{german}
-\def\graphmode{final}% graphmodes: draft: box; final: including figures
+\def\graphmode{final}           % graphmodes: draft: box; final: including figures
 
 % generate url catalog for toolchain
 \def\urlfilename{url_codeblocks}
@@ -25,7 +25,7 @@
 \input{new_interface}
 
 % own macro file
-\input{user_settings_de}
+\input{user_settings_en}
 
 \begin{document}
 \include{cb_titlepage}

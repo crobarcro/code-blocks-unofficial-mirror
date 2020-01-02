@@ -1,0 +1,58 @@
+\ProvidesFile{titlepage.tex}[2003/07/01 HighTec Vorlage]
+%%%%%%%%%%%% titlepage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+\pagenumbering{roman}
+\makeatletter
+\@ifundefined{htmlmode}{%
+    \begin{titlepage}
+    \begin{flushleft}
+        \includegraphics[width=\columnwidth]{mystyles/cb_splash}
+        \vfill
+        \makeatletter
+        \@ifundefined{Subtitle}{%
+            {\Huge\bf{\Subject}\\ [3ex] \Title\\ [3ex] \large{Version \DocVersion}\\ [3ex]}
+        }{%
+            {\Huge\bf{\Subject}\\ [3ex] \Title\\ \Subtitle\\ [3ex] \large{Version \DocVersion}\\ [3ex]}
+        }
+        \makeatother
+    \end{flushleft}
+    \vfill
+    Merci à l'équipe \codeblocks  :\newline
+
+    Anders F. Björklund (afb), Biplab Kumar Modak (biplab), Bartomiej wiecki (byo),
+    Paul A. Jimenez (ceniza), Koa Chong Gee (cyberkoa), Daniel Orb (daniel2000), Lieven de Cock (killerbot), Yiannis Mandravellos (mandrav), Mispunt (mispunt), Martin Halle (mortenmacfly), Jens Lody (jens), Jerome Antoine (dje), Damien Moore (dmoore),
+    Pecan Heber (pecan), Ricardo Garcia (rickg22), Thomas Denk (thomasdenk), tiwag (tiwag), stahta01 (stahta01), oBFusCATed (oBFusCATed), BlueHazzard (BlueHazzard) 
+
+    Et bien d'autres contributeurs...
+
+    Manuel original en Anglais et en Allemand (V1.x) par Mario Cupelli (mariocup)\\
+    Traduction de la version originale anglaise et corrections/ajouts dans la version 2 par Gérard Durand (gd\_on).\par
+
+    Il est permis de copier, distribuer et/ou modifier ce document dans le respect de la licence "GNU Free Documentation", Version 1.2 ou toute autre version postérieure publiée par la "Free Software Foundation".
+
+    mis à jour en décembre 2019
+    \end{titlepage}
+    \pagestyle{headings}
+%%%%%%%%%%%% Table of contents %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \ifthenelse{\boolean{shortdocu}}{}{
+%        \tableofcontents
+        \ifthenelse{\boolean{figreg}}{\listoffigures}{}
+        \ifthenelse{\boolean{tabreg}}{\listoftables}{}
+    }
+    \clearemptydoublepage \pagestyle{headings}
+    \pagenumbering{arabic}
+}{%
+    \begin{titlepage}
+        \@ifundefined{Subtitle}{%
+            \Huge\bf{{\Subject} {\Title}}\\
+        }{
+            \Huge\bf{{\Subject} {\Title} {\Subtitle}}\\
+        }
+        \large{Version \DocVersion}
+    \end{titlepage}
+    \clearemptydoublepage \pagestyle{headings}
+    %\tableofcontents
+    \clearemptydoublepage \pagenumbering{arabic}
+    \pagenumbering{arabic}
+}
+\makeatother

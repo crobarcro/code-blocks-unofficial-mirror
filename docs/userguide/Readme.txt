@@ -39,7 +39,7 @@ Generating documentation under linux or mingw shell:
 pdf-version:
 german version:
 
-make -f makefiles/gendocu.mak pdf MAINFILE=main_codeblocks_de
+make -f makefiles/gendocu.mak pdf MAINFILE=main_codeblocks_fr
 
 english version:
 make -f makefiles/gendocu.mak pdf MAINFILE=main_codeblocks_en

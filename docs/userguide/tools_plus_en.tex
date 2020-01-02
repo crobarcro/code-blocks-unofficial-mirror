@@ -2,7 +2,7 @@
 
 Creating a new tool is fairly simple, and can be completed in a few simple steps. First open \menu{Tools(+),Configure Tools...} to access the User-defined Tools dialog.
 
-\figures{tools_setup}{User-defined Tools dialog}
+\screenshot{tools_setup}{User-defined Tools dialog}
 
 \genterm{Tool Name}
 
@@ -47,7 +47,7 @@ Controls the placement of the command in the Tools(+) menu, giving the option of
 
 Will create this structure.
 
-\figures{tools_menu_path}{Tools menu structure}
+\figures[H][width=.6\columnwidth]{tools_menu_path}{Tools menu structure}
 
 The command name will be used if this entry is blank. If the first character is a period, the command will be hidden.
 
@@ -55,7 +55,7 @@ The command name will be used if this entry is blank. If the first character is 
 
 This controls the command's placement in the right-click menu of the Projects and Files tabs of the Management pane. The same rules of structure with the Tools Menu Path apply here.
 
-\figures{tools_context_path}{Context menu structure}
+\figures[H][width=.8\columnwidth]{tools_context_path}{Context menu structure}
 
 Please note that the command will not show up in the context menu unless the Command Line contains one or more of the following: \codeline{\$relfile}, \codeline{\$file}, \codeline{\$reldir}, \codeline{\$dir}, \codeline{\$relpath}, \codeline{\$path}, \codeline{\$fname}, and \codeline{\$fext}.
 
@@ -65,12 +65,13 @@ This determines where the output of the command will be redirected. The purpose 
 \genterm{Tools Output Window}
 Tools that only output results command (and require no input) line generally use this setting. The program will be run invisibly and any output will be redirected to the appropriate tab of the Tools Output Window. The text [DONE] will be added upon the tool's completion.
 
-\figures{tool_output}{Tool Output window}
+\figures[H][width=.5\columnwidth]{tool_output}{Tool Output window}
 
-\hint{If the Tools Output window is open when Code::Blocks is closed, it may trigger Code::Blocks to crash.}
+\hint{If the Tools Output window is open when \codeblocks is closed, it may trigger \codeblocks to crash.}
 
-\genterm{Code::Blocks Console}
+\genterm{\codeblocks Console}
 This will cause the program to be run through the executable \file{cb\_console\_runner} (the same program that is launched after Build and run). This is generally used for command line tools with more advanced user interactions, although GUI programs can also be used (especially if the program is unstable and/or also leaves messages in the standard output). Console runner will pause the window (prevent it from closing), display the run time, and the exit code when the program finishes.
+
 \genterm{Standard Shell}
 This is the same as placing the command in a batch or shell script, then running it. The program will run in whatever its default method is, and when it finishes, its window will close. This setting is useful for running a program (for example a file or web browser) that must remain open after \codeblocks is closed.
 
@@ -172,21 +173,55 @@ svn update "$dir"
 \end{itemize}
 \end{itemize}
 
+\genterm{Export makefile}
+
+\hint{this uses the command line-tool cbp2make.}\label{sec:tool_cbp2make}
+
+\begin{itemize}
+\item Windows
+\begin{itemize}
+\item Tools Menu
+\begin{cmd}
+"path_to_cbp2make\cbp2make" -in "$(PROJECTFILE)"
+\end{cmd}
+\end{itemize}
+
+\item Linux
+\begin{itemize}
+\item Tools Menu
+\begin{cmd}
+"path_to_cbp2make/cbp2make" -in "$(PROJECTFILE)"
+\end{cmd}
+\end{itemize}
+\end{itemize}
+
 \genterm{Compress active project to archive}
 
 \begin{itemize}
 \item Windows
 \begin{itemize}
-\item 7z or zip - Tools Menu
+\item 7z or zip - Tools Menu (on a single line)
 \begin{cmd}
-"path_to_7z\7z" a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate -mmt=on -mx9 -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 -md=64m -mfb=64 -ms=on} -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*"
-\end{cmd}
-\item tar.gz or tar.bz2 - Tools Menu
-\begin{cmd}
-cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*" && "path_to_7z\7z" a -t$if(gz == $inputstr{gz or bz2?}){gzip -mx9 -mfb=128 -mpass=10 -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)..\$(PROJECT_NAME).tar.gz}{bzip2 -mmt=on -mx9 -md=900k -mpass=7 -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)..\$(PROJECT_NAME).tar.bz2}" "$(PROJECTDIR)..\$(PROJECT_NAME).tar" && cmd /c del "$(PROJECTDIR)..\$(PROJECT_NAME).tar""
+"path_to_7z\7z" a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate
+     -mmt=on -mx9 -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 
+     -md=64m -mfb=64 -ms=on} -sccUTF-8 "-w$(PROJECTDIR).."
+     "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*"
 \end{cmd}
 
-\hint{The Windows command line interpreter has been invoked directly here (\cmdline{cmd /c}), allowing for multiple commands to be chained in a single line. However, this causes the command to fail to execute in the Code::Blocks Console.}
+\item tar.gz or tar.bz2 - Tools Menu (on a single line)
+\begin{cmd}
+cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).."
+      "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*" && 
+      "path_to_7z\7z" a -t$if(gz == $inputstr{gz or bz2?}){gzip -mx9 
+      -mfb=128 -mpass=10 -sccUTF-8 "-w$(PROJECTDIR).." 
+      "$(PROJECTDIR)..\$(PROJECT_NAME).tar.gz}{bzip2 -mmt=on -mx9 
+      -md=900k -mpass=7 -sccUTF-8 "-w$(PROJECTDIR).." 
+      "$(PROJECTDIR)..\$(PROJECT_NAME).tar.bz2}"
+      "$(PROJECTDIR)..\$(PROJECT_NAME).tar" && 
+       cmd /c del "$(PROJECTDIR)..\$(PROJECT_NAME).tar""
+\end{cmd}
+
+\hint{The Windows command line interpreter has been invoked directly here (\cmdline{cmd /c}), allowing for multiple commands to be chained in a single line. However, this causes the command to fail to execute in the \codeblocks Console.}
 
 \end{itemize}
 
@@ -194,11 +229,15 @@ cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR
 \begin{itemize}
 \item 7z or zip - Tools Menu
 \begin{cmd}
-7z a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate -mmt=on -mx9 -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 -md=64m -mfb=64 -ms=on} -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)../$(PROJECT_NAME)" "$(PROJECTDIR)*"
+7z a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate -mmt=on -mx9
+    -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 -md=64m -mfb=64 -ms=on}
+    -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)../$(PROJECT_NAME)"
+    "$(PROJECTDIR)*"
 \end{cmd}
 \item tar.gz or tar.bz2 - Tools Menu
 \begin{cmd}
-tar -cf "$(PROJECTDIR)../$(PROJECT_NAME).tar.$if(gz == $inputstr{gz or bz2?}){gz" -I 'gzip}{bz2" -I 'bzip2} -9' "$(PROJECTDIR)*"
+tar -cf "$(PROJECTDIR)../$(PROJECT_NAME).tar.$if(gz == $inputstr{gz 
+     or bz2?}){gz" -I 'gzip}{bz2" -I 'bzip2} -9' "$(PROJECTDIR)*"
 \end{cmd}
 \end{itemize}
 \end{itemize}

@@ -58,17 +58,29 @@
 \newcommand{\pxref}[1]{\autoref{#1} on \pa\pageref{#1}}% for references
 }
 }{}
+\ifthenelse{\equal{\lang}{french}}{%
+\def\hintname{Note}
+\def\au{"}%
+\def\ao{"}%
+\def\gl{équation~}%
+\def\pa{page~}%
+\ifthenelse{\boolean{html}}{%
+\newcommand{\pxref}[1]{\autoref{#1}}% pour références
+}{%
+\newcommand{\pxref}[1]{\autoref{#1} à la \pa\pageref{#1}}% pour références
+}
+}{}
 
 \newcommand{\tab}{\hspace{5mm}}%
 \setlength{\@fptop}{0pt} % figures on empty pages are placed at the start of page
 
 % macros for software documentation
-\def\var#1{\textless{#1}{\textgreater}}% for variable
-\providecommand{\samp}[1]{'#1'}% set text in quotes ''
-\providecommand{\file}[1]{\texttt{#1}}% for filename within the text
-\providecommand{\optional}[1]{[#1]}% for optional parameters
+\def\var#1{\textless{#1}{\textgreater}}     % for variable
+\providecommand{\samp}[1]{'#1'}             % set text in quotes ''
+\providecommand{\file}[1]{\texttt{#1}}      % for filename within the text
+\providecommand{\optional}[1]{[#1]}         % for optional parameters
 \providecommand{\opt}[1]{\mbox{\texttt{#1}}}% option of compiler, assembler, linker etc
-\def\osp{\textbackslash}% define operating system path for windows
+\def\osp{\textbackslash}                    % define operating system path for windows
 \newcommand*{\menu}[1]{%
   \begingroup% falls ein aufrufendes Makro \@tempa oder \@tempb verwendet
     \let\@tempb\relax
@@ -101,14 +113,14 @@ basicstyle=\small\sffamily, stringstyle=\sffamily, commentstyle=\color{black}, s
 \newcommand{\codeinput}[1]{\VerbatimInput[tabsize=2, fontsize=\footnotesize, fontfamily=courier]{#1}}% code input as file with rel. path
 \DefineVerbatimEnvironment{code}{Verbatim}{tabsize=2, fontsize=\footnotesize, fontfamily=courier}%
 
-\ifthenelse{\boolean{html}}{% use normal size for code environment
-\lstset{captionpos=t, morecomment=[is]{/*}{*/},% prefix i for deleting such comments
+\ifthenelse{\boolean{html}}{                    % use normal size for code environment
+\lstset{captionpos=t, morecomment=[is]{/*}{*/}, % prefix i for deleting such comments
 basicstyle=\sffamily, stringstyle=\sffamily, commentstyle=\color{black}, showstringspaces=false, tabsize=2, language=C}
 }{}
 \DefineVerbatimEnvironment{cmd}{Verbatim}{tabsize=2, fontsize=\footnotesize, fontfamily=courier}%
 
 % Macros for IDE
-\def\codeblocks{CodeBlocks\xspace}
+\def\codeblocks{Code::Blocks\xspace}
 \ifthenelse{\not\boolean{html}}{%
 \providecommand{\launch}[2]{\href{run:#1}{#2}}
 }{%

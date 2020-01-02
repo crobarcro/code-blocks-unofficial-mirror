@@ -1,0 +1,46 @@
+% Version of Document Management
+% $Revision: $
+
+
+\def\newcharencode{utf8}        % set character encoding
+\input{mystyles/booleans}       % boolean declaration
+\setboolean{urlreg}{true}       % for url catalogue
+\setboolean{bibreg}{false}      % for bibliography
+\setboolean{indreg}{false}      % for index generation
+\setboolean{shortdocu}{true}    % oneside document
+
+%%%%% options %%%%%%%%%
+\def\lang{french}
+\def\graphmode{final}           % graphmodes: draft: box; final: including figures
+
+% generate url catalog for toolchain
+\def\urlfilename{mystyles/url_codeblocks}
+
+%%%%%%%% parameter for titlepage %%%%%%%%%%
+\def\Subject{Code::Blocks}
+\def\Title{Manuel Utilisateur}
+\def\DocVersion{2.0 beta}
+
+% style for documentation
+\input{mystyles/format_docu}
+\input{mystyles/new_interface}
+%\usepackage[french]{babel}
+
+% own macro file
+\input{user_settings_en}
+
+\begin{document}
+\renewcommand{\contentsname}{Table des Matières}	% ou Sommaire % Ici car \usepackage[french]{babel} donne des erreurs
+\include{mystyles/cb_titlepage_fr}
+\tableofcontents{}
+\include{basics_fr}
+\include{plugins_fr}
+%\include{more_plugins_fr}      % already called in plugins_fr
+\include{params_fr}
+\include{working_with_cb_fr}
+\include{install_configure_fr}
+\include{generate_fr}
+\appendix % generation of appendix	...creates an appendices.aux file, but after, what to do ?
+\include{appendices}
+\include{mystyles/lists}
+\end{document}

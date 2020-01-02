@@ -1,9 +1,16 @@
 \ProvidesFile{format_docu.tex}[2007/05/26 HighTec template]
 \ifthenelse{\boolean{shortdocu}}{\def\docupagemode{oneside}}{\def\docupagemode{twoside}}
 \ifthenelse{\equal{\lang}{german}}{%
-\documentclass[idxtotoc,ngerman,12pt,\docupagemode,a4paper,normalheadings,headsepline,pointlessnumbers,footsepline,\graphmode]{scrbook}
+    %\documentclass[index=totoc,ngerman,12pt,\docupagemode,a4paper,headings=normal,headsepline,numbers=noenddot,footsepline,\graphmode]{scrbook}
+    \documentclass[idxtotoc,ngerman,12pt,\docupagemode,a4paper,normalheadings,headsepline,pointlessnumbers,footsepline,\graphmode]{scrbook}
 }{
-\documentclass[idxtotoc,english,12pt,\docupagemode,a4paper,normalheadings,headsepline,pointlessnumbers,footsepline,\graphmode]{scrbook}
+    \ifthenelse{\equal{\lang}{french}}{%
+        \documentclass[idxtotoc,french,12pt,\docupagemode,a4paper,normalheadings,headsepline,pointlessnumbers,footsepline,\graphmode]{scrbook}
+    }{
+    % english by default
+        %\documentclass[index=totoc,english,12pt,\docupagemode,a4paper,headings=normal,headsepline,numbers=noenddot,footsepline,\graphmode]{scrbook}
+        \documentclass[idxtotoc,english,12pt,\docupagemode,a4paper,normalheadings,headsepline,pointlessnumbers,footsepline,\graphmode]{scrbook}
+    }
 }
 
 \ifthenelse{\boolean{nomreg}}{\usepackage[\lang]{nomencl}\makeglossary}{}
@@ -11,6 +18,8 @@
 
 % common packages
 \input{mystyles/common_pack}
+\usepackage{makecell}
+\usepackage{xcolor}
 
 \topmargin=-1cm \oddsidemargin=0mm \evensidemargin=0mm
 \textheight24cm \textwidth16cm \marginparsep=3mm \marginparwidth=15mm %\reversemarginpar
@@ -60,10 +69,10 @@
    \if@hsl \vskip 1.5\p@ \hrule \fi}}
   \def\@evenfoot{\vbox{\hsize=\textwidth
    \if@fsl \hrule \vskip 3\p@ \fi
-   \hb@xt@ \textwidth{{\pnumfont\thepage\hfil Codeblocks}}}}%
+   \hb@xt@ \textwidth{{\pnumfont\thepage\hfil Code::Blocks}}}}%
   \def\@oddfoot{\vbox{\hsize=\textwidth
    \if@fsl \hrule \vskip 3\p@ \fi
-   \hb@xt@ \textwidth{{Codeblocks\pnumfont\hfil\thepage}}}}%
+   \hb@xt@ \textwidth{{Code::Blocks\pnumfont\hfil\thepage}}}}%
   \def\chaptermark##1{%
    \markboth {\ifnum \c@secnumdepth >\m@ne
       \if@mainmatter
@@ -75,3 +84,15 @@
         \sectionmarkformat\fi
         ##1}}}
 \makeatother
+
+% For listing colorization (\begin{lstlisting] ....
+\definecolor{darkGreen}{rgb}{0.,0.5,0.0}
+\lstset{
+	basicstyle=\small,
+	keywordstyle=\bf \color{blue},
+%	commentstyle=\color[gray]{0.5},
+	commentstyle=\color{darkGreen},
+	stringstyle=\color{red},
+	tabsize=4,
+	showstringspaces=false
+}

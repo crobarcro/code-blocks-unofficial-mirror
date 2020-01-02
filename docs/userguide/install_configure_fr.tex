@@ -1,0 +1,108 @@
+﻿\chapter{Installation et Configuration de CodeBlocks avec MinGW}\label{sec:install_codeblocks}
+
+Ce chapitre décrit comment installer et configurer \codeblocks. Le processus d'installation est ici décrit pour Windows, mais peut être adapté aux autres OS.
+
+\section{Installation de la dernière version officielle de \codeblocks sous Windows}
+
+Étapes d'installation :
+\begin{itemize}
+\item Télécharger l'installateur de \codeblocks (\url{https://codeblocks.org/downloads/26}). Si vous ne n'avez pas MinGW d'installé, ou si vous ne savez pas lequel choisir, \textbf{télécharger la version qui intègre MinGW}. Pour une version 17.12, le nom de l'installateur est : codeblocks-17.12mingw-setup.exe. Pour la prochaine version ce sera quelque chose comme 20.xx.
+\item Lancez l'installateur. C'est un installateur standard pour Windows ; pressez seulement sur Next (ou Suivant) après avoir lu chaque écran.
+\item Si vous prévoyez d'installer un compilateur après avoir installé \codeblocks, lisez les informations données dans l'installateur.
+\item Si vous avez téléchargé un installateur qui n'intègre pas MinGW, vous devrez certainement configurer manuellement le compilateur (souvent \codeblocks détecte tout seul le compilateur).
+\end{itemize}
+
+Nous verrons dans la section suivante comment installer et configurer un autre compilateur.
+
+\textbf{Notes:}
+
+\begin{itemize}
+\item Le fichier codeblocks-17.12-setup.exe inclue \codeblocks avec toutes les extensions. Le fichier codeblocks-17.12-setup-nonadmin.exe est fourni par commodité aux utilisateurs qui n'ont pas les droits d'administrateur sur leur(s) machine(s).
+\item Le fichier codeblocks-17.12mingw-setup.exe inclue en plus un compilateur GCC/G++ et un débugueur GDB provenant de TDM-GCC (version 5.1.0, 32 bits, SJLJ). Le fichier codeblocks-17.12mingw\_fortran-setup.exe inclue de plus un compilateur Gfortran (TDM-GCC). \textbf{Malheureusement}, la version 5.1 de gfortran est buguée (ce n'est pas spécifique à la version TDM !). La prochaine version de \codeblocks sera distribuée avec une autre version de MinGW (et donc gfortran) qui n'a pas ce problème.
+\item Le fichier codeblocks-17.12(mingw)-nosetup.zip est fourni par commodité aux utilisateurs qui sont allergiques aux installateurs. Toutefois, vous ne pourrez pas choisir les extensions / fonctionnalités à installer (tout est inclus) ni même créer les raccourcis de menu. Pour l'"installation" vous êtes seuls.
+\item Comme la version 17.12 est maintenant assez ancienne, il est possible d'utiliser une version "nightly" disponible via le Forum. Ces générations n'ont pas de compilateurs intégrés !! Vous aurez donc besoin d'installer un compilateur vous-même (si vous n'en avez pas déjà un). Avant l'installation, SVP jetez un oeuil sur \url{http://forums.codeblocks.org/index.php/topic,3232.0.html} 
+\item Une bonne solution, est d'installer une distribution officielle comportant MinGW puis d'installer par-dessus cette version officielle une "nightly". Il vous faudra suivre la procédure avec attention car la version 17.12 a été compilée en 32 bits alors que les versions "nightly" sont maintenant compilées en 64 bits. Le mélange de versions apporte des problèmes. 
+\end{itemize}
+
+\section{Configurer MinGW}
+
+Cette section décrit comment installer et configurer MinGW.
+
+\subsection{Généralités}
+
+Une chaîne d'outils de compilation est ce que \codeblocks utilise pour transformer le code que vous avez tapé en nombres que l'ordinateur peut comprendre. Comme une chaîne d'outils de compilation est une chose plutôt complexe \textbf{ce n'est pas une partie intégrante de \codeblocks} mais plutôt un projet séparé que \codeblocks utilise alors. Le type d'outils de chaîne de compilation dont il est question dans ces pages est la chaîne d'outils "MinGW". Cela veut dire "Minimalist GNU for Windows." Et "GNU" peut s'interpréter par "GNU's Not Unix." Davantage d'informations sur le projet GNU peuvent être trouvées via la page d'accueil de GNU.
+
+Pour la plupart des chaînes d'outils de compilation basées sur MinGW, il est important d'avoir le chemin de cette chaîne dans votre variable d'environnement PATH car cela signifie que pendant le développement les librairies seront accessibles par défaut à vos programmes pendant que vous les développez mais cela rend aussi plus facile l'utilisation d'utilitaires comme CMake car ils seront capables de trouver votre chaîne d'outils de compilation. Quand vous distribuez vraiment vos programmes vers d'autres ordinateurs vous aurez besoin de copier les fichiers .dll nécessaires depuis votre répertoire de chaîne de compilation et de les intégrer en tant que partie intégrante dans votre installateur. Sur votre machine elles sont dans votre PATH et donc vous les avez toujours à portée, mais sur les ordinateurs des autres utilisateurs, ils n'auront peut-être pas cette chaîne d'outils de compilation, c'est pourquoi vous devrez fournir vos fichier dll avec votre programme. 
+
+\subsection{La chaîne d'outils de compilation MinGW}\label{sec:install_toolchains}
+
+Vous pouvez trouver sur le web plusieurs distributions de MinGW. Voici une liste non exhaustive de distributions.
+
+\begin{description}
+\item[MinGW - Le projet original] \url{http://www.mingw.org/}: Compilateurs 32 bits seulement;
+\item[Distribution TDM]\url{http://tdm-gcc.tdragon.net/}: 32 et 64 bits, mais une distribution 5.1, maintenant obsolète. Était utilisée et distribuée avec \codeblocks 17.12;
+\item[MinGW 64] \url{https://sourceforge.net/projects/mingw-w64/files/}: 32 et 64 bits, une distribution en version 8.1 dans "Toolchains targetting". Le projet parent des générations MinGW-builds, qui inclue bien plus que ce qui est nécessaire - MinGW-Builds suffiront pour un usage courant. Plusieurs choix sont proposés : pour un compilateur 32 bits, vous pouvez choisir la version posix, sjlj (i686-posix-sjlj) et pour un compilateur 64 bits vous pouvez choisir la version posix, seh (x86\_64-posix-seh) (choix compatibles avec ceux de l'ancienne version TDM). C'est cette dernière version 64 bits-posix-seh qui est utilisée dans les versions nightlies compilées récentes de \codeblocks. Les autres choix fonctionnent également : Cela dépend de vos besoins. gcc, g++, gfortran, gdb, lto, omp, mingw32-make sont dans la distribution;
+\item[MinGW 64 Ray\_linn Personal build] \url{https://sourceforge.net/projects/mingw-w64/files/Multilib%20Toolchains%28Targetting%20Win32%20and%20Win64%29/ray_linn/gcc-9.x-with-ada/}: une distribution 64 bits, version 9.1 dans le sous-répertoire "personnal build". Utilise les \textbf{librairies statiques}, et dons pas besoin de distribuer des dlls avec vos propres exécutables, mais ils seront plus gros. ada, gcc, g++, gfortran, lto, objc, obj-c++, omp sont dans la distribution. Problème : gdb et make n'y sont pas inclus.
+\item[MinGW Equation] \url{http://www.equation.com/servlet/equation.cmd?fa=fortran}: 32 et 64 bits, versions récentes (plusieurs choix). Utilise des \textbf{librairies statiques}, donc, comme avec la version ci-dessus, produit des exécutables plus gros, mais pas besoin de distribuer les dlls avec vos propres exécutables.  gcc, g++, gfortran, gdb, lto, omp, make sont dans la distribution;
+\item[MinGW LH\_Mouse version] \url{https://gcc-mcf.lhmouse.com/}: 32 et 64 bits, versions récentes (mais pas forcément la toute dernière). Pas de gfortran (?). Modèle de thread spécial (mcf).  gcc, g++, gdb, lto, omp, mingw32-make sont dans la distribution. Pas de gfortran;
+\item[MinGW on Winlibs] \url{http://winlibs.com/}: 64 bits, versions récentes (mais pas forcément la toute dernière). gcc, g++, gfortran, gdb, lto, objc, obj-c++, omp, mingw32-make sont dans la distribution;
+\item[Msys2] \url{http://www.msys2.org/} and \url{https://packages.msys2.org/group/mingw-w64-x86_64-toolchain}: versions 32 et/ou 64 bits, installées dans \file{C:\osp msys64\osp mingw32} et \file{C:\osp msys64\osp mingw64}. Contrairement aux installateurs ci-dessus tout-en-un, nécessite un travail complémentaire pour l'ajuster à vos besoins, vos compilateurs, votre chaîne d'outils. Lisez attentivement la documentation. Néanmoins, Msys2 fourni des versions récentes des compilateurs et donne accès à un outil de mise à jour : pacman. ada, gcc, g++, gfortran, gdb, lto, objc, obj-c++, omp, mingw32-make sont dans la distribution ou peuvent être installés via pacman;
+\end{description}
+
+\subsection{Configuration de \codeblocks}
+
+Allez dans vos paramètres du Compilateur :
+
+\figures[H][width=.4\columnwidth]{Compiler_Settings}{Paramètres des Compilateurs}
+
+Puis dans l'onglet "Programmes" (ou "Toolchain executables") (flèche en rouge), cliquez sur "...", (flèche en bleu) et choisissez le répertoire de base où vous avez installé MinGW (64-bits ici). Une fois que vous avez choisi ce répertoire, dans la sous rubrique "Fichiers de Programmes" (flèche en vert) des champs à rempli sont affichés. Si vous n'utilisez pas une chaîne d'outils MinGW 64-bits, il se peut que des variations mineures soient à apporter aux noms des exécutables. Si vous avez choisi d'abord le bouton indiqué par la flèche en bleu, alors pour chacun des boutons suivants vous serez déjà positionnés dans le sous-répertoire bin de votre MinGW 64-bits où sont placés les programmes.
+
+\figures[H][width=.85\columnwidth]{CB_Toolchain}{Configuration de la chaine d'outils de \codeblocks}
+
+\textbf{Note :} Vous pouvez entrer le nom comme gcc.exe ou x86\_64-w64-mingw32-gcc.exe ou mingw32-gcc.exe (cela dépend de la distribution) : c'est en fait le même exécutable. De même pour g++.
+
+\hint{Pour configurer un nouveau compilateur, gfortran par exemple, entrez gfortran.exe dans les 3 premiers champs de texte de l'ongle "Fichiers Programmes", ou le nom exact qui est dans votre distribution}
+
+Maintenant, allez dans les paramètres du Débugueur :
+
+\figures[H][width=.4\columnwidth]{Settings_Debugger}{Paramètres du Débugueur}
+
+Choisissez votre débugueur par défaut (flèche en rouge), puis remplissez dans le champ de l'exécutable comme indiqué pour MinGW 64-bits (flèche en bleu).
+
+\figures[H][width=.7\columnwidth]{Debugger_Default}{Configuration du Débugueur par Default}
+
+\genterm{Résumé}
+
+Vous avez maintenant un environnement de \codeblocks qui est configuré pour utiliser correctement MinGW 64-bits. Utilisez ce guide comme un modèle pour configurer d'autres chaînes d'outils de compilation qu'elle qu'en soit la source - suivez simplement cette procédure de base.
+
+\genterm{Outils de Développement}
+Normalement vous ne devriez pas avoir besoin de ces outils. ZIP est pratique, notamment pour générer \codeblocks lui-même, est souvent déjà présent dans MinGW, mais les autres outils servent seulement dans des cas particuliers.
+\begin{itemize}
+\item UnxUtils : différents outils Unix-Like sur \url{https://sourceforge.net/projects/unxutils/}
+\item GnuWin32 : d'autres outils Gnu sur \url{https://sourceforge.net/projects/gnuwin32/}
+\item ZIP : 32-bits ou 64-bits sur \url{ftp://ftp.info-zip.org/pub/infozip/win32/} : choisissez plutôt une version zip300xn.
+\end{itemize}
+
+\section{Version Nightly de \codeblocks sous Windows}
+
+Les générations de "Nightly" sont distribuées "telles que". Ce sont des distributions "binaires", normalement fournies au jour le jour, représentant les dernières avancées de l'état de l'art des sources de \codeblocks. En principe, elles sont relativement stables, cependant elles peuvent aussi introduire de nouveaux bugs, des régressions, mais d'un autre côté elles peuvent apporter de nouvelles fonctionnalités, des corrections de bugs, ...
+
+Avant de décrire ce que ces générations contiennent, il est important de commencer par revoir ce que NE SONT PAS les générations "nightly". Pour débuter demandez-vous : qu'est-ce que \codeblocks ?\\
+Bon, c'est un IDE (Integrated Development Environment) soit en français un Environnement de Développement Intégré : cela signifie qu'il intègre différents outils et les fait travailler ensemble. Donc \codeblocks \textbf{n'est PAS un compilateur} (ni même MS, ni Borland), ce n'est pas un débugueur, ce n'est pas non plus un système de génération de makefile ! Donc, ces composants ne font \textbf{PAS} partie de \codeblocks, et par conséquent ne font pas partie de la distribution "nightly". Toutefois, plusieurs des composants de développement mentionnés peuvent être combinés pour travailler harmonieusement ensemble dans \codeblocks. Par exemple, vous pouvez y intégrer le compilateur GCC et le débugueur GDB et ainsi compiler et débuguer vos propres applications.\\
+\codeblocks est lui-même compilé avec GCC. Sous Windows c'est fait en utilisant le portage MinGW. Comme \codeblocks est une application "multi-threaded" cela nécessite le support de routines fournissant ces fonctionnalités de "multi-threading". C'est ce que fourni le portage MinGW, et plus particulièrement la librairie "mingwm10.dll" Dans chacune des annonces d'une nouvelle génération de "nightly" vous trouverez un lien vers cette dll.
+\codeblocks possède un GUI (Graphical User Interface) ou Interface Graphique Utilisateur en français. Il existe de nombreuses façons de créer un GUI : vous pouvez le coder en utilisant le coeur de l'API Windows (ne fonctionne que sous Windows) ou vous pouvez utiliser MS-MFC (ne fonctionne que sous Windows) ou vous pouvez utiliser une librairie de GUI tierce, comme QT, wxWidgets, Tk, ...\\
+\codeblocks utilise wxWidgets. En plus de l'apport GUI, wxWidgets amène bien d'autres fonctions supplémentaires (manipulation de chaînes, fichiers, flux, sockets, ...) et le meilleur dans tout ça : wxWidgets apporte ces fonctions pour différentes plateformes (Windows, Linux, Apple, ...). Cela veut dire qu'il faut que \codeblocks intègre les fonctionnalités de wxWidgets (à savoir le code binaire qui effectue le réel travail). C'est ce qui est obtenu via une dll : "wxmsw31u\_gcc\_cb.dll" (\textit{17.12 était basé sur "wxmsw28u\_gcc\_cb.dll"}). Une fois de plus, sur chaque annonce de génération "nightly" vous trouverez un lien vers cette dll ainsi que d'autres prérequis.
+
+Quand, sous Windows, vous installez une version officielle incluant MinGW (la version recommandée), vous trouverez un répertoire MinGW dans \file{C:\osp Program Files\osp codeblocks}. Si cela marche bien ici dans la plupart des cas, ce n'est pas le meilleur endroit pour le mettre, entre autre parce qu'il y a un espace à l'intérieur du nom du chemin d'accès et que cet espace peut troubler certains des composants de MinGW. Alors, sous Windows, déplacez de répertoire MinGW vers C:, par exemple. Vous pouvez même le renommer MinGW32 pour une chaîne d'outils de compilation en 32 bits, ou MinGW64 pour une chaîne en 64 bits.
+
+Comme dit précédemment, une bonne solution pour installer une version "nightly" est de commencer par installer une version officielle, puis de la \textbf{configurer et l'essayer}. Ainsi, vos fichiers de configuration, associations, raccourcis clavier, seront correctement paramétrés et ils seront conservés lors de l'installation de la "nightly". Le lien pour trouver les dernières “nightlies“ est \url{http://forums.codeblocks.org/index.php/board,20.0.html}.
+
+Si vous installez votre "nightly" par-dessus une version 17.12, vous devez suivre avec attention la procédure car un certain nombre de choses ont changé, notamment, elles sont compilées en 64 bits avec un compilateur récent, une version différente de wxWidgets et ont besoin de dlls complémentaires.
+\begin{itemize}
+\item Dézippez la version "nightly" téléchargée et copiez tous les fichiers dans votre sous-répertoire codeblocks. Si vous avez déplacé votre sous-répertoire MinGW ailleurs, vous pouvez même d'abord effacer tout le contenu de ce sous-répertoire codeblocks pour être certain de ne pas mélanger les versions. Une exception : si vous avez installé dans ce sous-répertoire des choses particulières, comme par exemple des fichiers de localisation, ne les effacez pas.
+\item Dézippez les dlls wxWidgets trouvées avec votre nightly. Vous pouvez les installer directement dans votre sous-répertoire codeblocks ou pour une utilisation plus étendue, dans le sous-répertoire bin de MinGW. Vérifiez que ce sous-répertoire bin est bien dans votre PATH. Il devrait l'être si vous avez installé une version officielle de CB via l'installateur.
+\item Dézippez les dlls pré-requises. Vous pouvez les installer directement dans votre sous-répertoire codeblocks. Ici également, pour une utilisation plus étendue, vous pouvez les installer dans le sous-répertoire bin de MinGW ou tout autre chemin accessible via votre variable PATH. Mais faites attention, car elles peuvent déjà y être présentes, mais dans une version différente, ou compilées par une autre version de MinGW. Dans ce cas, il vaut mieux les garder dans le sous-répertoire codeblocks, pour un usage privé et pour éviter des soucis liés au mélange de versions de MinGW.
+\hint{Les dlls de wxWidgets et celles pré-requises ne changent pas très souvent. Donc, si vous installez une "nightly" par-dessus une précédente, il n'est pas forcément nécessaire de les mettre à jour. Lisez avec attention le sujet du forum concernant spécifiquement cette "nightly".}
+\end{itemize}
+
+Normalement, c'est tout. Votre "nightly" est prête à l'emploi ...
