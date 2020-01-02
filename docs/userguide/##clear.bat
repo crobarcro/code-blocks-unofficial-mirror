@@ -1,19 +1,26 @@
 @echo off
 REM TeX Clean v1.01 [Morten Mac-Fly]
 echo Cleaning folder. Please wait...
+if exist *.4ct del *.4ct >nul
+if exist *.4tc del *.4tc >nul
 if exist *.aux del *.aux >nul
 if exist *.bak del *.bak >nul
 if exist *.bbl del *.bbl >nul
 if exist *.blb del *.blg >nul
 if exist *.blg del *.blg >nul
 if exist *-blx.bib del *-blx.bib >nul
+if exist *.css del *.css >nul
 if exist *.dep del *.dep >nul
 if exist *.dvi del *.dvi >nul
+if exist *.env del *.env >nul
 if exist *.glo del *.glo >nul
 if exist *.gls del *.gls >nul
+if exist *.html del *.html >nul
 if exist *.idx del *.idx >nul
+if exist *.idv del *.idv >nul
 if exist *.ilg del *.ilg >nul
 if exist *.ind del *.ind >nul
+if exist *.lg  del *.lg  >nul
 if exist *.lof del *.lof >nul
 if exist *.log del *.log >nul
 if exist *.lot del *.lot >nul
@@ -31,6 +38,7 @@ if exist *.synctex* del *.synctex* >nul
 if exist *.tex.sav del *.tex.sav >nul
 if exist *.tmp del *.tmp >nul
 if exist *.toc del *.toc >nul
+if exist *.xref del *.xref >nul
 
 if not exist *.prj goto NoCopy
 echo Backing up project file.
