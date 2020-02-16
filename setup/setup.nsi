@@ -65,7 +65,7 @@ XPStyle on
 # Defines #
 ###########
 !define REGKEY           "SOFTWARE\$(^Name)"
-!define VERSION          17.12
+!define VERSION          20.XX
 !define COMPANY          "The Code::Blocks Team"
 !define URL              http://www.codeblocks.org
 
@@ -74,11 +74,11 @@ XPStyle on
 ###########
 # Possibly required to adjust manually:
 # (Folder with wxWidgets DLL - unicode, monolithic.)
-!define WX_BASE          C:\wxMSW-2.8.12\lib\gcc_dll
+!define WX_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_20xx_28
 !define WX_VER           28
 # Possibly required to adjust manually:
 # (CodeBlocks binary folder - the one where codeblocks.exe is.)
-!define CB_BASE          C:\CB17xx\src\output
+!define CB_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_20xx_28
 !define CB_SHARE         \share
 !define CB_SHARE_CB      ${CB_SHARE}\CodeBlocks
 !define CB_DOCS          ${CB_SHARE_CB}\docs
@@ -89,18 +89,17 @@ XPStyle on
 !define CB_TEMPLATES     ${CB_SHARE_CB}\templates
 !define CB_WIZARD        ${CB_TEMPLATES}\wizard
 !define CB_IMAGES        ${CB_SHARE_CB}\images
-!define CB_IMG_16        ${CB_IMAGES}\16x16
 !define CB_IMG_SETTINGS  ${CB_IMAGES}\settings
 !define CB_XML_COMPILERS ${CB_SHARE_CB}\compilers
 # Possibly required to adjust manually:
 # (Folder with full MinGW/GCC installation, *including* debugger.)
-!define MINGW_BASE       C:\TDM-GCC-32
+!define MINGW_BASE       D:\Devel\CodeBlocks\Releases\MinGW
 # Possibly required to adjust manually:
 # (Folder with logos and GPL license as text file.)
-!define CB_ADDONS        C:\CB17xxSetup
+!define CB_ADDONS        D:\Devel\CodeBlocks\Releases\Setup
 # Possibly required to adjust manually:
 # (Folder with documentation provided by mariocup.)
-!define CB_DOCS_SRC      C:\CB17xxSetup
+!define CB_DOCS_SRC      D:\Devel\CodeBlocks\Releases\Setup
 !ifdef MINGW_BUNDLE
 !define CB_MINGW         \MinGW
 !endif
@@ -110,8 +109,8 @@ XPStyle on
 #########
 # Possibly required to adjust manually:
 # Note: These files are only required for the installer.
-!define CB_SPLASH        ${CB_ADDONS}\setup_splash_1712.bmp
-!define CB_LOGO          ${CB_ADDONS}\setup_logo_1712.bmp
+!define CB_SPLASH        ${CB_ADDONS}\setup_splash_20xx.bmp
+!define CB_LOGO          ${CB_ADDONS}\setup_logo_20xx.bmp
 # Possibly required to adjust manually:
 # Note: This file is only required for the installer.
 !define CB_LICENSE       ${CB_ADDONS}\gpl-3.0.txt
@@ -139,8 +138,7 @@ XPStyle on
 !include Sections.nsh
 
 # Reserved Files
-ReserveFile "${NSISDIR}\Plugins\AdvSplash.dll"
-#ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
 
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
@@ -241,11 +239,18 @@ doInstall:
 accessOK:
         SetOverwrite on
         File ${WX_BASE}\wxmsw${WX_VER}u_gcc_cb.dll
+        File ${WX_BASE}\wxmsw${WX_VER}u_gl_gcc_cb.dll
         File ${CB_BASE}\Addr2LineUI.exe
         File ${CB_BASE}\cb_console_runner.exe
         File ${CB_BASE}\CbLauncher.exe
         File ${CB_BASE}\codeblocks.dll
         File ${CB_BASE}\codeblocks.exe
+        # thread handling
+        File ${CB_BASE}\libgcc_s_seh-1.dll
+        File ${CB_BASE}\libstdc++-6.dll
+        File ${CB_BASE}\libwinpthread-1.dll
+        # crash handler
+        File ${CB_BASE}\dbgcore.dll
         File ${CB_BASE}\dbghelp.dll
         File ${CB_BASE}\exchndl.dll
         File ${CB_BASE}\mgwhelp.dll
@@ -272,8 +277,6 @@ accessOK:
         File ${CB_BASE}${CB_TEMPLATES}\*.*
         SetOutPath $INSTDIR${CB_IMAGES}
         File ${CB_BASE}${CB_IMAGES}\*.png
-        SetOutPath $INSTDIR${CB_IMG_16}
-        File ${CB_BASE}${CB_IMG_16}\*.png
         SetOutPath $INSTDIR${CB_IMG_SETTINGS}
         File ${CB_BASE}${CB_IMG_SETTINGS}\*.png
         WriteRegStr HKCU "${REGKEY}\Components" "Core Files (required)" 1
@@ -489,6 +492,15 @@ accessOK:
                 WriteRegStr HKCU "${REGKEY}\Components" "Lua" 1
             SectionEnd
 
+            Section "Nim"
+                SectionIn 1 4
+                SetOutPath $INSTDIR${CB_LEXERS}
+                SetOverwrite on
+                File ${CB_BASE}${CB_LEXERS}\lexer_nim.sample
+                File ${CB_BASE}${CB_LEXERS}\lexer_nim.xml
+                WriteRegStr HKCU "${REGKEY}\Components" "Nim" 1
+            SectionEnd
+
             Section "Perl"
                 SectionIn 1 4
                 SetOutPath $INSTDIR${CB_LEXERS}
@@ -582,6 +594,15 @@ accessOK:
                 WriteRegStr HKCU "${REGKEY}\Components" "LaTeX" 1
             SectionEnd
 
+            Section "Markdown"
+                SectionIn 1 4
+                SetOutPath $INSTDIR${CB_LEXERS}
+                SetOverwrite on
+                File ${CB_BASE}${CB_LEXERS}\lexer_markdown.sample
+                File ${CB_BASE}${CB_LEXERS}\lexer_markdown.xml
+                WriteRegStr HKCU "${REGKEY}\Components" "Markdown" 1
+            SectionEnd
+
             Section "XML"
                 SectionIn 1 2 3 4
                 SetOutPath $INSTDIR${CB_LEXERS}
@@ -589,6 +610,15 @@ accessOK:
                 File ${CB_BASE}${CB_LEXERS}\lexer_xml.sample
                 File ${CB_BASE}${CB_LEXERS}\lexer_xml.xml
                 WriteRegStr HKCU "${REGKEY}\Components" "XML" 1
+            SectionEnd
+
+            Section "YAML"
+                SectionIn 1 4
+                SetOutPath $INSTDIR${CB_LEXERS}
+                SetOverwrite on
+                File ${CB_BASE}${CB_LEXERS}\lexer_yaml.sample
+                File ${CB_BASE}${CB_LEXERS}\lexer_yaml.xml
+                WriteRegStr HKCU "${REGKEY}\Components" "YAML" 1
             SectionEnd
         SectionGroupEnd
 
@@ -811,6 +841,14 @@ accessOK:
                 WriteRegStr HKCU "${REGKEY}\Components" "NSIS installer script" 1
             SectionEnd
 
+            Section "Plain file"
+                SectionIn 1 4
+                SetOutPath $INSTDIR${CB_LEXERS}
+                SetOverwrite on
+                File ${CB_BASE}${CB_LEXERS}\lexer_plain.xml
+                WriteRegStr HKCU "${REGKEY}\Components" "Plain file" 1
+            SectionEnd
+
             Section "Property file"
                 SectionIn 1 4
                 SetOutPath $INSTDIR${CB_LEXERS}
@@ -903,8 +941,6 @@ accessOK:
             File ${CB_BASE}${CB_SHARE_CB}\codecompletion.zip
             SetOutPath $INSTDIR${CB_PLUGINS}
             File ${CB_BASE}${CB_PLUGINS}\codecompletion.dll
-            SetOutPath $INSTDIR${CB_IMAGES}\codecompletion
-            File ${CB_BASE}${CB_IMAGES}\codecompletion\*.png
             SetOutPath $INSTDIR${CB_IMG_SETTINGS}
             File ${CB_BASE}${CB_IMG_SETTINGS}\codecompletion.png
             File ${CB_BASE}${CB_IMG_SETTINGS}\codecompletion-off.png
@@ -924,7 +960,6 @@ accessOK:
             File ${CB_BASE}${CB_IMAGES}\compile.png
             File ${CB_BASE}${CB_IMAGES}\compilerun.png
             File ${CB_BASE}${CB_IMAGES}\rebuild.png
-            File ${CB_BASE}${CB_IMAGES}\run.png
             File ${CB_BASE}${CB_IMAGES}\stop.png
             SetOutPath $INSTDIR${CB_IMG_SETTINGS}
             File ${CB_BASE}${CB_IMG_SETTINGS}\compiler.png
@@ -940,11 +975,6 @@ accessOK:
             SetOutPath $INSTDIR${CB_PLUGINS}
             File ${CB_BASE}${CB_PLUGINS}\debugger.dll
             SetOutPath $INSTDIR${CB_IMAGES}
-            File ${CB_BASE}${CB_IMAGES}\dbgnext.png
-            File ${CB_BASE}${CB_IMAGES}\dbgrun.png
-            File ${CB_BASE}${CB_IMAGES}\dbgrunto.png
-            File ${CB_BASE}${CB_IMAGES}\dbgstep.png
-            File ${CB_BASE}${CB_IMAGES}\dbgstop.png
             SetOutPath $INSTDIR${CB_IMG_SETTINGS}
             File ${CB_BASE}${CB_IMG_SETTINGS}\debugger.png
             File ${CB_BASE}${CB_IMG_SETTINGS}\debugger-off.png
@@ -1173,22 +1203,6 @@ SectionGroup "Contrib Plugins" SECGRP_CONTRIB_PLUGINS
         File ${CB_BASE}${CB_SHARE_CB}\DoxyBlocks.zip
         SetOutPath $INSTDIR${CB_PLUGINS}
         File ${CB_BASE}${CB_PLUGINS}\DoxyBlocks.dll
-        SetOutPath $INSTDIR${CB_IMAGES}\DoxyBlocks
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\chm.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\comment_block.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\comment_line.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\configure.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\doxywizard.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\extract.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\html.png
-        SetOutPath $INSTDIR${CB_IMAGES}\DoxyBlocks\16x16
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\chm.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\comment_block.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\comment_line.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\configure.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\doxywizard.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\extract.png
-        File ${CB_BASE}${CB_IMAGES}\DoxyBlocks\16x16\html.png
         SetOutPath $INSTDIR${CB_IMG_SETTINGS}
         File ${CB_BASE}${CB_IMG_SETTINGS}\DoxyBlocks.png
         File ${CB_BASE}${CB_IMG_SETTINGS}\DoxyBlocks-off.png
@@ -1260,8 +1274,27 @@ SectionGroup "Contrib Plugins" SECGRP_CONTRIB_PLUGINS
         SetOutPath $INSTDIR${CB_PLUGINS}
         File ${CB_BASE}${CB_PLUGINS}\FortranProject.dll
         SetOutPath $INSTDIR${CB_IMAGES}\fortranproject
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\*.dem
         File ${CB_BASE}${CB_IMAGES}\fortranproject\*.f90
-        File ${CB_BASE}${CB_IMAGES}\fortranproject\*.png
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\*.py
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\16x16
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\16x16\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\20x20
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\20x20\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\24x24
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\24x24\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\28x28
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\28x28\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\32x32
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\32x32\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\40x40
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\40x40\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\48x48
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\48x48\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\56x56
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\56x56\*.png
+        SetOutPath $INSTDIR${CB_IMAGES}\fortranproject\64x64
+        File ${CB_BASE}${CB_IMAGES}\fortranproject\64x64\*.png
         WriteRegStr HKCU "${REGKEY}\Components" "Fortran Project plugin" 1
     SectionEnd
 
@@ -1449,11 +1482,28 @@ SectionGroup "Contrib Plugins" SECGRP_CONTRIB_PLUGINS
         File ${CB_BASE}${CB_IMG_SETTINGS}\spellchecker-off.png
         SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker
         File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\OnlineSpellChecking.xml
-        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\*.png
         File ${CB_ADDONS}\en_GB.aff
         File ${CB_ADDONS}\en_GB.dic
         File ${CB_ADDONS}\en_US.aff
         File ${CB_ADDONS}\en_US.dic
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\16x16
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\16x16\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\20x20
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\20x20\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\24x24
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\24x24\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\28x28
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\28x28\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\32x32
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\32x32\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\40x40
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\40x40\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\48x48
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\48x48\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\56x56
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\56x56\*.png
+        SetOutPath $INSTDIR${CB_SHARE_CB}\SpellChecker\64x64
+        File ${CB_BASE}${CB_SHARE_CB}\SpellChecker\64x64\*.png
         WriteRegStr HKCU "${REGKEY}\Components" "SpellChecker plugin" 1
     SectionEnd
 
@@ -1477,12 +1527,6 @@ SectionGroup "Contrib Plugins" SECGRP_CONTRIB_PLUGINS
         SetOutPath $INSTDIR${CB_IMG_SETTINGS}
         File ${CB_BASE}${CB_IMG_SETTINGS}\ThreadSearch.png
         File ${CB_BASE}${CB_IMG_SETTINGS}\ThreadSearch-off.png
-        SetOutPath $INSTDIR${CB_IMAGES}\ThreadSearch
-        File ${CB_BASE}${CB_IMAGES}\ThreadSearch\*.png
-        SetOutPath $INSTDIR${CB_IMAGES}\ThreadSearch\16x16
-        File ${CB_BASE}${CB_IMAGES}\ThreadSearch\16x16\*.png
-        SetOutPath $INSTDIR${CB_IMAGES}\ThreadSearch\22x22
-        File ${CB_BASE}${CB_IMAGES}\ThreadSearch\22x22\*.png
         WriteRegStr HKCU "${REGKEY}\Components" "ThreadSearch plugin" 1
     SectionEnd
 
@@ -1533,16 +1577,6 @@ Section "C::B CBP2Make" SEC_CBP2MAKE
     SetOutPath $SMPROGRAMS\${CB_SM_GROUP}
     CreateShortcut "$SMPROGRAMS\${CB_SM_GROUP}\$(^Name) CBP2Make.lnk" $INSTDIR\cbp2make.exe
     WriteRegStr HKCU "${REGKEY}\Components" "C::B CBP2Make" 1
-SectionEnd
-
-Section "C::B CC Test" SEC_CCTEST
-    SectionIn 1
-    SetOutPath $INSTDIR
-    SetOverwrite on
-    File ${CB_BASE}\cctest.exe
-    SetOutPath $SMPROGRAMS\${CB_SM_GROUP}
-    CreateShortcut "$SMPROGRAMS\${CB_SM_GROUP}\$(^Name) CC Test.lnk" $INSTDIR\cctst.exe
-    WriteRegStr HKCU "${REGKEY}\Components" "C::B CC Test" 1
 SectionEnd
 
 Section "C::B Share Config" SEC_SHARECONFIG
@@ -1642,12 +1676,6 @@ Section "-un.C::B Share Config" UNSEC_SHARECONFIG
     Delete /REBOOTOK $INSTDIR\cb_share_config.exe
     Delete /REBOOTOK "$SMPROGRAMS\${CB_SM_GROUP}\$(^Name) Share Config.lnk"
     DeleteRegValue HKCU "${REGKEY}\Components" "C::B Share Config"
-SectionEnd
-
-Section "-un.C::B CC Test" UNSEC_CCTEST
-    Delete /REBOOTOK $INSTDIR\cctest.exe
-    Delete /REBOOTOK "$SMPROGRAMS\${CB_SM_GROUP}\$(^Name) CC Test.lnk"
-    DeleteRegValue HKCU "${REGKEY}\Components" "C::B CC Test"
 SectionEnd
 
 Section "-un.C::B CBP2Make" UNSEC_CBP2MAKE
@@ -1769,9 +1797,28 @@ Section "-un.File Manager plugin" UNSEC_FILEMANAGER
 SectionEnd
 
 Section /o "-un.Fortran Project plugin" UNSEC_FORTRANPROJECT
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\*.png
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\*.dem
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\*.f90
-    RMDir /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\*.py
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\16x16\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\16x16
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\20x20\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\20x20
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\24x24\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\24x24
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\28x28\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\28x28
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\32x32\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\32x32
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\40x40\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\40x40
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\48x48\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\48x48
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\56x56\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\56x56
+    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\64x64\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject\64x64
+    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\fortranproject
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\FortranProject.dll
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\FortranProject.zip
     DeleteRegValue HKCU "${REGKEY}\Components" "Fortran Project plugin"
@@ -1892,6 +1939,24 @@ Section "-un.SpellChecker plugin" UNSEC_SPELLCHECKER
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\*.dic
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\*.png
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\OnlineSpellChecking.xml
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\16x16\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\16x16
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\20x20\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\20x20
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\24x24\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\24x24
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\28x28\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\28x28
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\32x32\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\32x32
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\40x40\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\40x40
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\48x48\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\48x48
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\56x56\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\56x56
+    Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\64x64\*.png
+    RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker\64x64
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}\SpellChecker
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\SpellChecker-off.png
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\SpellChecker.png
@@ -1901,12 +1966,6 @@ Section "-un.SpellChecker plugin" UNSEC_SPELLCHECKER
 SectionEnd
 
 Section "-un.ThreadSearch plugin" UNSEC_THREADSEARCH
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch\22x22\*.png
-    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch\22x22
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch\16x16\*.png
-    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch\16x16
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch\*.png
-    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\ThreadSearch
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\ThreadSearch-off.png
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\ThreadSearch.png
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\ThreadSearch.dll
@@ -1980,8 +2039,6 @@ Section "-un.Code Completion plugin" UNSEC_CODECOMPLETION
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\codecompletion.png
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\codecompletion.dll
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\codecompletion.zip
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\codecompletion\*.png
-    RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}\codecompletion
     DeleteRegValue HKCU "${REGKEY}\Components" "Code Completion plugin"
 SectionEnd
 
@@ -1989,7 +2046,6 @@ Section "-un.Compiler plugin" UNSEC_COMPILER
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\compiler-off.png
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\compiler.png
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\stop.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\run.png
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\rebuild.png
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\compilerun.png
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\compile.png
@@ -2003,11 +2059,6 @@ SectionEnd
 Section "-un.Debugger plugin" UNSEC_DEBUGGER
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\debugger-off.png
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\debugger.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\dbgstop.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\dbgstep.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\dbgrunto.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\dbgrun.png
-    Delete /REBOOTOK $INSTDIR${CB_IMAGES}\dbgnext.png
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\debugger.dll
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\debugger.zip
     DeleteRegValue HKCU "${REGKEY}\Components" "Debugger plugin"
@@ -2193,6 +2244,12 @@ Section "-un.Lua" UNSEC_LUA
     DeleteRegValue HKCU "${REGKEY}\Components" "Lua"
 SectionEnd
 
+Section "-un.Nim" UNSEC_NIM
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_nim.xml
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_nim.sample
+    DeleteRegValue HKCU "${REGKEY}\Components" "Nim"
+SectionEnd
+
 Section "-un.Perl" UNSEC_PERL
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_perl.xml
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_perl.sample
@@ -2205,7 +2262,7 @@ Section "-un.Postscript" UNSEC_POSTSCRIPT
     DeleteRegValue HKCU "${REGKEY}\Components" "Postscript"
 SectionEnd
 
-Section "-un.Python" UNSEC_PY
+Section "-un.Python" UNSEC_PYTHON
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_python.xml
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_python.sample
     DeleteRegValue HKCU "${REGKEY}\Components" "Python"
@@ -2299,10 +2356,22 @@ Section "-un.LaTeX" UNSEC_LATEX
     DeleteRegValue HKCU "${REGKEY}\Components" "LaTeX"
 SectionEnd
 
+Section "-un.Markdown" UNSEC_MARKDOWN
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_markdown.xml
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_markdown.sample
+    DeleteRegValue HKCU "${REGKEY}\Components" "Markdown"
+SectionEnd
+
 Section "-un.XML" UNSEC_XML
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_xml.xml
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_xml.sample
     DeleteRegValue HKCU "${REGKEY}\Components" "XML"
+SectionEnd
+
+Section "-un.YAML" UNSEC_YAML
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_yaml.xml
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_yaml.sample
+    DeleteRegValue HKCU "${REGKEY}\Components" "YAML"
 SectionEnd
 
 # "Graphics Programming"
@@ -2408,13 +2477,12 @@ Section "-un.NSIS installer script" UNSEC_NSIS
     DeleteRegValue HKCU "${REGKEY}\Components" "NSIS installer script"
 SectionEnd
 
-Section "-un.XBase" UNSEC_XBASE
-    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_prg.xml
-    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_prg.sample
-    DeleteRegValue HKCU "${REGKEY}\Components" "XBase"
+Section "-un.Plain file" UNSEC_PLAIN
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_plain.xml
+    DeleteRegValue HKCU "${REGKEY}\Components" "Plain file"
 SectionEnd
 
-Section "-un.Property file" UNSEC_PROP
+Section "-un.Property file" UNSEC_PROPERTY
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_properties.xml
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_properties.sample
     DeleteRegValue HKCU "${REGKEY}\Components" "Property file"
@@ -2424,6 +2492,12 @@ Section "-un.Sql" UNSEC_SQL
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_sql.xml
     Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_sql.sample
     DeleteRegValue HKCU "${REGKEY}\Components" "Sql"
+SectionEnd
+
+Section "-un.XBase" UNSEC_XBASE
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_prg.xml
+    Delete /REBOOTOK $INSTDIR${CB_LEXERS}\lexer_prg.sample
+    DeleteRegValue HKCU "${REGKEY}\Components" "XBase"
 SectionEnd
 
 # C::B lexers end
@@ -2463,8 +2537,6 @@ Section "-un.Core Files (required)" UNSEC_CORE
     # cause the post section will handle this.
     Delete /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}\*.png
     RMDir  /REBOOTOK $INSTDIR${CB_IMG_SETTINGS}
-    Delete /REBOOTOK $INSTDIR${CB_IMG_16}\*.png
-    RMDir  /REBOOTOK $INSTDIR${CB_IMG_16}
     Delete /REBOOTOK $INSTDIR${CB_IMAGES}\*.png
     RMDir  /REBOOTOK $INSTDIR${CB_IMAGES}
     Delete /REBOOTOK $INSTDIR${CB_TEMPLATES}\*.*
@@ -2486,16 +2558,23 @@ Section "-un.Core Files (required)" UNSEC_CORE
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE}
     Delete /REBOOTOK $INSTDIR\mingwm10.dll
-    Delete /REBOOTOK $INSTDIR\dbghelp.dll
-    Delete /REBOOTOK $INSTDIR\exchndl.dll
-    Delete /REBOOTOK $INSTDIR\mgwhelp.dll
-    Delete /REBOOTOK $INSTDIR\symsrv.dll
+    # thread handling
+    Delete /REBOOTOK $INSTDIR\libwinpthread-1.dll
+    Delete /REBOOTOK $INSTDIR\libstdc++-6.dll
+    Delete /REBOOTOK $INSTDIR\libgcc_s_seh-1.dll
+    # crash handler
     Delete /REBOOTOK $INSTDIR\symsrv.yes
+    Delete /REBOOTOK $INSTDIR\symsrv.dll
+    Delete /REBOOTOK $INSTDIR\mgwhelp.dll
+    Delete /REBOOTOK $INSTDIR\exchndl.dll
+    Delete /REBOOTOK $INSTDIR\dbghelp.dll
+    Delete /REBOOTOK $INSTDIR\dbgcore.dll
     Delete /REBOOTOK $INSTDIR\codeblocks.exe
     Delete /REBOOTOK $INSTDIR\codeblocks.dll
     Delete /REBOOTOK $INSTDIR\CbLauncher.exe
     Delete /REBOOTOK $INSTDIR\cb_console_runner.exe
     Delete /REBOOTOK $INSTDIR\Addr2LineUI.exe
+    Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gl_gcc_cb.dll
     Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gcc_cb.dll
 !if ${WX_VER} == 28
     Delete /REBOOTOK $INSTDIR\wxpropgrid.dll
@@ -2586,9 +2665,10 @@ Function un.onInit
     !insertmacro SELECT_UNSECTION "Haskell"                            ${UNSEC_HASKELL}
     !insertmacro SELECT_UNSECTION "Lisp"                               ${UNSEC_LISP}
     !insertmacro SELECT_UNSECTION "Lua"                                ${UNSEC_LUA}
+    !insertmacro SELECT_UNSECTION "Nim"                                ${UNSEC_NIM}
     !insertmacro SELECT_UNSECTION "Perl"                               ${UNSEC_PERL}
     !insertmacro SELECT_UNSECTION "Postscript"                         ${UNSEC_POSTSCRIPT}
-    !insertmacro SELECT_UNSECTION "Python"                             ${UNSEC_PY}
+    !insertmacro SELECT_UNSECTION "Python"                             ${UNSEC_PYTHON}
     !insertmacro SELECT_UNSECTION "Ruby"                               ${UNSEC_RUBY}
     !insertmacro SELECT_UNSECTION "Squirrel"                           ${UNSEC_SQ}
     !insertmacro SELECT_UNSECTION "VB Script"                          ${UNSEC_VB}
@@ -2597,7 +2677,9 @@ Function un.onInit
     !insertmacro SELECT_UNSECTION "CSS"                                ${UNSEC_CSS}
     !insertmacro SELECT_UNSECTION "HTML"                               ${UNSEC_HTML}
     !insertmacro SELECT_UNSECTION "LaTeX"                              ${UNSEC_LATEX}
+    !insertmacro SELECT_UNSECTION "Markdown"                           ${UNSEC_MARKDOWN}
     !insertmacro SELECT_UNSECTION "XML"                                ${UNSEC_XML}
+    !insertmacro SELECT_UNSECTION "YAML"                               ${UNSEC_YAML}
     # "Graphics Programming"
     !insertmacro SELECT_UNSECTION "CUDA"                               ${UNSEC_CUDA}
     !insertmacro SELECT_UNSECTION "GLSL (GLSlang)"                     ${UNSEC_GLSL}
@@ -2625,7 +2707,8 @@ Function un.onInit
     !insertmacro SELECT_UNSECTION "MASM"                               ${UNSEC_MASM}
     !insertmacro SELECT_UNSECTION "MATLAB"                             ${UNSEC_MATLAB}
     !insertmacro SELECT_UNSECTION "NSIS installer script"              ${UNSEC_NSIS}
-    !insertmacro SELECT_UNSECTION "Property file"                      ${UNSEC_PROP}
+    !insertmacro SELECT_UNSECTION "Plain file"                         ${UNSEC_PLAIN}
+    !insertmacro SELECT_UNSECTION "Property file"                      ${UNSEC_PROPERTY}
     !insertmacro SELECT_UNSECTION "Sql"                                ${UNSEC_SQL}
     !insertmacro SELECT_UNSECTION "XBase"                              ${UNSEC_XBASE}
 
