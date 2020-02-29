@@ -65,7 +65,7 @@ XPStyle on
 # Defines #
 ###########
 !define REGKEY           "SOFTWARE\$(^Name)"
-!define VERSION          20.XX
+!define VERSION          20.03
 !define COMPANY          "The Code::Blocks Team"
 !define URL              http://www.codeblocks.org
 
@@ -74,11 +74,11 @@ XPStyle on
 ###########
 # Possibly required to adjust manually:
 # (Folder with wxWidgets DLL - unicode, monolithic.)
-!define WX_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_20xx
+!define WX_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003
 !define WX_VER           313
 # Possibly required to adjust manually:
 # (CodeBlocks binary folder - the one where codeblocks.exe is.)
-!define CB_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_20xx
+!define CB_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003
 !define CB_SHARE         \share
 !define CB_SHARE_CB      ${CB_SHARE}\CodeBlocks
 !define CB_DOCS          ${CB_SHARE_CB}\docs
@@ -109,8 +109,8 @@ XPStyle on
 #########
 # Possibly required to adjust manually:
 # Note: These files are only required for the installer.
-!define CB_SPLASH        ${CB_ADDONS}\setup_splash_20xx.bmp
-!define CB_LOGO          ${CB_ADDONS}\setup_logo_20xx.bmp
+!define CB_SPLASH        ${CB_ADDONS}\setup_splash_2003.bmp
+!define CB_LOGO          ${CB_ADDONS}\setup_logo_2003.bmp
 # Possibly required to adjust manually:
 # Note: This file is only required for the installer.
 !define CB_LICENSE       ${CB_ADDONS}\gpl-3.0.txt
@@ -245,10 +245,10 @@ accessOK:
         File ${CB_BASE}\CbLauncher.exe
         File ${CB_BASE}\codeblocks.dll
         File ${CB_BASE}\codeblocks.exe
-        # thread handling
-        File ${CB_BASE}\libgcc_s_seh-1.dll
-        File ${CB_BASE}\libstdc++-6.dll
-        File ${CB_BASE}\libwinpthread-1.dll
+#        # thread handling
+#        File ${CB_BASE}\libgcc_s_seh-1.dll
+#        File ${CB_BASE}\libstdc++-6.dll
+#        File ${CB_BASE}\libwinpthread-1.dll
         # crash handler
         File ${CB_BASE}\dbgcore.dll
         File ${CB_BASE}\dbghelp.dll
@@ -2558,10 +2558,10 @@ Section "-un.Core Files (required)" UNSEC_CORE
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE}
     Delete /REBOOTOK $INSTDIR\mingwm10.dll
-    # thread handling
-    Delete /REBOOTOK $INSTDIR\libwinpthread-1.dll
-    Delete /REBOOTOK $INSTDIR\libstdc++-6.dll
-    Delete /REBOOTOK $INSTDIR\libgcc_s_seh-1.dll
+#    # thread handling
+#    Delete /REBOOTOK $INSTDIR\libwinpthread-1.dll
+#    Delete /REBOOTOK $INSTDIR\libstdc++-6.dll
+#    Delete /REBOOTOK $INSTDIR\libgcc_s_seh-1.dll
     # crash handler
     Delete /REBOOTOK $INSTDIR\symsrv.yes
     Delete /REBOOTOK $INSTDIR\symsrv.dll
