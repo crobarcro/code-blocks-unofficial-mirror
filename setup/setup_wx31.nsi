@@ -47,6 +47,11 @@ XPStyle on
 # The following line toggles whether the installer includes the MinGW
 # compiler suite (including GDB) or not. Uncomment to include MinGW.
 #!define MINGW_BUNDLE
+
+# The following line toggles whether the MinGw DLL#s shall be included
+# in the release. These are needed, if C::B is not compiled statically.
+!define MINGW_DLLS
+
 # The following line toggles whether the installer includes the
 # CBLauncher tool for portable settings (AppData in the C::B folder).
 !define CB_LAUNCHER
@@ -245,10 +250,12 @@ accessOK:
         File ${CB_BASE}\CbLauncher.exe
         File ${CB_BASE}\codeblocks.dll
         File ${CB_BASE}\codeblocks.exe
-#        # thread handling
-#        File ${CB_BASE}\libgcc_s_seh-1.dll
-#        File ${CB_BASE}\libstdc++-6.dll
-#        File ${CB_BASE}\libwinpthread-1.dll
+!ifdef MINGW_DLLS
+        # MinGW DLL's for thread handling etc.
+        File ${CB_BASE}\libgcc_s_seh-1.dll
+        File ${CB_BASE}\libstdc++-6.dll
+        File ${CB_BASE}\libwinpthread-1.dll
+!endif
         # crash handler
         File ${CB_BASE}\dbgcore.dll
         File ${CB_BASE}\dbghelp.dll
@@ -2558,10 +2565,12 @@ Section "-un.Core Files (required)" UNSEC_CORE
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE_CB}
     RMDir  /REBOOTOK $INSTDIR${CB_SHARE}
     Delete /REBOOTOK $INSTDIR\mingwm10.dll
-#    # thread handling
-#    Delete /REBOOTOK $INSTDIR\libwinpthread-1.dll
-#    Delete /REBOOTOK $INSTDIR\libstdc++-6.dll
-#    Delete /REBOOTOK $INSTDIR\libgcc_s_seh-1.dll
+!ifdef MINGW_DLLS
+    # MinGW DLL's for thread handling etc.
+    Delete /REBOOTOK $INSTDIR\libwinpthread-1.dll
+    Delete /REBOOTOK $INSTDIR\libstdc++-6.dll
+    Delete /REBOOTOK $INSTDIR\libgcc_s_seh-1.dll
+!endif
     # crash handler
     Delete /REBOOTOK $INSTDIR\symsrv.yes
     Delete /REBOOTOK $INSTDIR\symsrv.dll
