@@ -124,8 +124,7 @@ void EditMimeTypesDlg::OnActionChanged(cb_unused wxCommandEvent& event)
 
 void EditMimeTypesDlg::OnNew(cb_unused wxCommandEvent& event)
 {
-    wxString wild = cbGetTextFromUser(_("Enter the new wildcard to add:"), _("Mime type"),
-                                      wxString(), this);
+    wxString wild = cbGetTextFromUser(_("Enter the new wildcard to add:"));
     if (wild.IsEmpty())
         return;
 

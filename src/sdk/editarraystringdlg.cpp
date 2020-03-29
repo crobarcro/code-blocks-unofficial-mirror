@@ -66,7 +66,7 @@ void EditArrayStringDlg::EndModal(int retCode)
 
 void EditArrayStringDlg::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
-    wxString w = cbGetTextFromUser(_("Add item"), _("Enter the new item:"), wxString(), this);
+    wxString w = cbGetTextFromUser(_("Add item"), _("Enter the new item:"));
     if (!w.IsEmpty())
         XRCCTRL(*this, "lstItems", wxListBox)->Append(w);
 }
@@ -76,7 +76,7 @@ void EditArrayStringDlg::OnEdit(wxCommandEvent& WXUNUSED(event))
     wxListBox* list = XRCCTRL(*this, "lstItems", wxListBox);
 
     wxString w = list->GetStringSelection();
-    w = cbGetTextFromUser(_("Edit item"), _("Edit the item:"), w, this);
+    w = cbGetTextFromUser(_("Edit item"), _("Edit the item:"), w);
     if (!w.IsEmpty())
         list->SetString(list->GetSelection(), w);
 }
