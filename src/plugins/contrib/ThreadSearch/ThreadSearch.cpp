@@ -147,41 +147,6 @@ ThreadSearch::~ThreadSearch()
 {
 }
 
-void ThreadSearch::CreateView(ThreadSearchViewManagerBase::eManagerTypes externalMgrType,
-                              bool forceType)
-{
-    int sashPosition;
-    ThreadSearchViewManagerBase::eManagerTypes mgrType;
-    wxArrayString searchPatterns, searchDirs, searchMasks;
-
-    // Loads configuration from default.conf
-    LoadConfig(sashPosition, mgrType, searchPatterns, searchDirs, searchMasks);
-    if (forceType)
-        mgrType = externalMgrType;
-
-    // Adds window to the manager
-    m_pThreadSearchView = new ThreadSearchView(*this);
-    m_pThreadSearchView->SetSearchHistory(searchPatterns, searchDirs, searchMasks);
-
-    // Sets splitter sash in the middle of the width of the window
-    // and creates columns as it is not managed in ctor on Linux
-    int x, y;
-    m_pThreadSearchView->GetSize(&x, &y);
-    m_pThreadSearchView->SetSashPosition(x/2);
-    m_pThreadSearchView->Update();
-
-    // Set the splitter posn from the config
-    if (sashPosition != 0)
-        m_pThreadSearchView->SetSashPosition(sashPosition);
-
-    // Shows/Hides search widgets on the Messages notebook ThreadSearch panel
-    m_pThreadSearchView->ShowSearchControls(m_ShowSearchControls);
-
-    // Builds manager
-    m_pViewManager = ThreadSearchViewManagerBase::BuildThreadSearchViewManagerBase(m_pThreadSearchView, true, mgrType);
-    m_pViewManager->ShowView(true);
-}
-
 void ThreadSearch::OnAttach()
 {
     // NOTE: after this function, the inherited member variable
@@ -199,7 +164,37 @@ void ThreadSearch::OnAttach()
      LOGIT( _T("ThreadSearch Plugin Logging Started"));
     #endif
 
-    CreateView(ThreadSearchViewManagerBase::TypeMessagesNotebook, false);
+    bool showPanel;
+    int  sashPosition;
+    ThreadSearchViewManagerBase::eManagerTypes mgrType;
+    wxArrayString searchPatterns, searchDirs, searchMasks;
+
+    // Loads configuration from default.conf
+    LoadConfig(showPanel, sashPosition, mgrType, searchPatterns, searchDirs, searchMasks);
+
+    // Adds window to the manager
+    m_pThreadSearchView = new ThreadSearchView(*this);
+    m_pThreadSearchView->SetSearchHistory(searchPatterns, searchDirs, searchMasks);
+
+    // Builds manager
+    m_pViewManager = ThreadSearchViewManagerBase::BuildThreadSearchViewManagerBase(m_pThreadSearchView, true, mgrType);
+
+    // Ensure view is shown or hidden
+    m_pViewManager->ShowView(showPanel);
+
+    // Sets splitter sash in the middle of the width of the window
+    // and creates columns as it is not managed in ctor on Linux
+    int x, y;
+    m_pThreadSearchView->GetSize(&x, &y);
+    m_pThreadSearchView->SetSashPosition(x/2);
+    m_pThreadSearchView->Update();
+
+    // Set the splitter posn from the config
+    if (sashPosition != 0)
+        m_pThreadSearchView->SetSashPosition(sashPosition);
+
+    // Shows/Hides search widgets on the Messages notebook ThreadSearch panel
+    m_pThreadSearchView->ShowSearchControls(m_ShowSearchControls);
 
     // true if it enters in OnRelease for the first time
     m_OnReleased = false;
@@ -216,24 +211,24 @@ void ThreadSearch::OnRelease(bool /*appShutDown*/)
     // --------------------------------------------------------------
     // Carefull! This routine can be entered consecutive times
     // --------------------------------------------------------------
-    if (m_OnReleased)
-        return;
+    if ( m_OnReleased ) return;
     m_OnReleased = true;
 
     // Removes Thread search menu item from the View menu
     RemoveMenuItems();
 
-    m_pToolbar = nullptr;
+    m_pToolbar = 0;
 
-    if (m_pThreadSearchView != nullptr)
+    if ( m_pThreadSearchView != 0 )
     {
         m_pViewManager->RemoveViewFromManager();
-        m_pThreadSearchView = nullptr;
+        m_pThreadSearchView->Destroy();
     }
 
     delete m_pViewManager;
-    m_pViewManager = nullptr;
+    m_pViewManager = 0;
 }
+
 
 void ThreadSearch::OnThreadSearchViewDestruction()
 {
@@ -246,13 +241,15 @@ void ThreadSearch::OnThreadSearchViewDestruction()
     m_pThreadSearchView->ApplySplitterSettings(m_ShowCodePreview, m_SplitterMode);
 
     // Saves configuration to default.conf
-    SaveConfig(m_pThreadSearchView->GetSashPosition(),
+    SaveConfig(m_pViewManager->IsViewShown(),
+               m_pThreadSearchView->GetSashPosition(),
+               m_pViewManager->GetManagerType(),
                m_pThreadSearchView->GetSearchHistory(),
                m_pThreadSearchView->GetSearchDirsHistory(),
                m_pThreadSearchView->GetSearchMasksHistory());
 
     // Reset of the pointer as view is being deleted
-    m_pThreadSearchView = nullptr;
+    m_pThreadSearchView = NULL;
 }
 
 void ThreadSearch::BuildMenu(wxMenuBar* menuBar)
@@ -328,8 +325,7 @@ void ThreadSearch::RemoveMenuItems()
         wxMenu* viewMenu = menuBar->GetMenu(idx);
         if ( viewMenu != 0 )
         {
-            wxMenuItem *item = viewMenu->Remove(controlIDs.Get(ControlIDs::idMenuViewThreadSearch));
-            delete item;
+            viewMenu->Remove(controlIDs.Get(ControlIDs::idMenuViewThreadSearch));
         }
     }
 
@@ -339,8 +335,7 @@ void ThreadSearch::RemoveMenuItems()
         wxMenu* searchMenu = menuBar->GetMenu(idx);
         if ( searchMenu != 0 )
         {
-            wxMenuItem *item = searchMenu->Remove(controlIDs.Get(ControlIDs::idMenuSearchThreadSearch));
-            delete item;
+            searchMenu->Remove(controlIDs.Get(ControlIDs::idMenuSearchThreadSearch));
         }
     }
 }
@@ -463,17 +458,18 @@ void ThreadSearch::Notify()
         return;
 
     m_pThreadSearchView->Update();
-    SaveConfig(m_pThreadSearchView->GetSashPosition(),
+    SaveConfig(m_pViewManager->IsViewShown(),
+               m_pThreadSearchView->GetSashPosition(),
+               m_pViewManager->GetManagerType(),
                m_pThreadSearchView->GetSearchHistory(),
                m_pThreadSearchView->GetSearchDirsHistory(),
                m_pThreadSearchView->GetSearchMasksHistory());
 }
 
 
-void ThreadSearch::LoadConfig(int& sashPosition,
+void ThreadSearch::LoadConfig(bool& showPanel, int& sashPosition,
                               ThreadSearchViewManagerBase::eManagerTypes& mgrType,
-                              wxArrayString& searchPatterns, wxArrayString& searchDirs,
-                              wxArrayString& searchMasks)
+                              wxArrayString& searchPatterns, wxArrayString& searchDirs, wxArrayString& searchMasks)
 {
     if ( !IsAttached() )
         return;
@@ -497,6 +493,8 @@ void ThreadSearch::LoadConfig(int& sashPosition,
     m_DrawLogLines               = pCfg->ReadBool(wxT("/DrawLogLines"),          false);
     m_AutosizeLogColumns         = pCfg->ReadBool(wxT("/AutosizeLogColumns"),    true);
 
+    showPanel                    = pCfg->ReadBool(wxT("/ShowPanel"),             true);
+
     m_FindData.SetScope           (pCfg->ReadInt (wxT("/Scope"),                 ScopeProjectFiles));
 
     m_FindData.SetSearchPath      (pCfg->Read    (wxT("/DirPath"),               wxEmptyString));
@@ -510,17 +508,16 @@ void ThreadSearch::LoadConfig(int& sashPosition,
         m_SplitterMode = wxSPLIT_HORIZONTAL;
     }
 
-    const int managerType = pCfg->ReadInt(wxT("/ViewManagerType"),
-                                          ThreadSearchViewManagerBase::TypeMessagesNotebook);
-    mgrType = ThreadSearchViewManagerBase::TypeMessagesNotebook;
-    if (managerType == ThreadSearchViewManagerBase::TypeLayout)
+    int managerType              = pCfg->ReadInt(wxT("/ViewManagerType"),        ThreadSearchViewManagerBase::TypeMessagesNotebook);
+    mgrType                      = ThreadSearchViewManagerBase::TypeMessagesNotebook;
+    if ( managerType == ThreadSearchViewManagerBase::TypeLayout )
     {
         mgrType = ThreadSearchViewManagerBase::TypeLayout;
     }
 
-    int loggerType = pCfg->ReadInt(wxT("/LoggerType"), ThreadSearchLoggerBase::TypeList);
-    m_LoggerType = ThreadSearchLoggerBase::TypeList;
-    if (loggerType == ThreadSearchLoggerBase::TypeTree)
+    int loggerType               = pCfg->ReadInt(wxT("/LoggerType"),             ThreadSearchLoggerBase::TypeList);
+    m_LoggerType                 = ThreadSearchLoggerBase::TypeList;
+    if ( loggerType == ThreadSearchLoggerBase::TypeTree )
     {
         m_LoggerType = ThreadSearchLoggerBase::TypeTree;
     }
@@ -535,8 +532,10 @@ void ThreadSearch::LoadConfig(int& sashPosition,
 }
 
 
-void ThreadSearch::SaveConfig(int sashPosition, const wxArrayString& searchPatterns,
-                              const wxArrayString& searchDirs, const wxArrayString& searchMasks)
+void ThreadSearch::SaveConfig(bool showPanel, int sashPosition,
+                              ThreadSearchViewManagerBase::eManagerTypes /*mgrType*/,
+                              const wxArrayString& searchPatterns, const wxArrayString& searchDirs,
+                              const wxArrayString& searchMasks)
 {
     ConfigManager* pCfg = Manager::Get()->GetConfigManager(_T("ThreadSearch"));
 
@@ -556,6 +555,8 @@ void ThreadSearch::SaveConfig(int sashPosition, const wxArrayString& searchPatte
     pCfg->Write(wxT("/DisplayLogHeaders"),     m_DisplayLogHeaders);
     pCfg->Write(wxT("/DrawLogLines"),          m_DrawLogLines);
     pCfg->Write(wxT("/AutosizeLogColumns"),    m_AutosizeLogColumns);
+
+    pCfg->Write(wxT("/ShowPanel"),             showPanel);
 
     pCfg->Write(wxT("/Scope"),                 m_FindData.GetScope());
 
@@ -909,18 +910,20 @@ void ThreadSearch::OnMnuEditPaste(wxCommandEvent& event)
 void ThreadSearch::SetManagerType(ThreadSearchViewManagerBase::eManagerTypes mgrType)
 {
     // Is type different from current one ?
-    if (mgrType != m_pViewManager->GetManagerType())
+    if ( mgrType != m_pViewManager->GetManagerType() )
     {
-        // Destroy current view manager.
-        if (m_pViewManager != nullptr)
+        // Get show state and destroy current view manager.
+        bool show(true);
+        if ( m_pViewManager != NULL )
         {
+            show = m_pViewManager->IsViewShown();
             m_pViewManager->RemoveViewFromManager();
             delete m_pViewManager;
-            m_pViewManager = nullptr;
         }
 
-        CreateView(mgrType, true);
-        m_pThreadSearchView->SetToolBar(m_pToolbar);
+        // Create and show new view manager.
+        m_pViewManager = ThreadSearchViewManagerBase::BuildThreadSearchViewManagerBase(m_pThreadSearchView, true, mgrType);
+        m_pViewManager->ShowView(show);
     }
 }
 

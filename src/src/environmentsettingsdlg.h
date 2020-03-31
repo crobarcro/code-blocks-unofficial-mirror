@@ -10,17 +10,16 @@
 #include <pluginmanager.h>
 
 class wxAuiDockArt;
-class wxCheckListBox;
-class wxColourPickerEvent;
 class wxListbookEvent;
+class wxCheckListBox;
 
 class EnvironmentSettingsDlg : public wxScrollingDialog
 {
-    public:
+	public:
 		EnvironmentSettingsDlg(wxWindow* parent, wxAuiDockArt* art);
 		virtual ~EnvironmentSettingsDlg();
 		virtual void EndModal(int retCode);
-    protected:
+	protected:
         void OnPageChanging(wxListbookEvent& event);
         void OnPageChanged(wxListbookEvent& event);
         void OnSetAssocs(wxCommandEvent& event);
@@ -39,9 +38,8 @@ class EnvironmentSettingsDlg : public wxScrollingDialog
 
         void OnChooseAppColourCategory(wxCommandEvent &event);
         void OnChooseAppColourItem(wxCommandEvent &event);
-        void OnClickAppColour(wxColourPickerEvent &event);
-        void OnClickAppColourDefault(wxCommandEvent &event);
-    private:
+        void OnClickAppColour(wxCommandEvent &event);
+	private:
         void AddPluginPanels();
         void LoadListbookImages();
         void UpdateListbookImages();

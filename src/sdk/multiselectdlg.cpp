@@ -152,7 +152,7 @@ void MultiSelectDlg::OnWildcard(cb_unused wxCommandEvent& event)
     wxString wild = cbGetTextFromUser(_("Enter a selection wildcard\n(e.g. \"dlg*.cpp\" "
                                         "would select all files starting with \"dlg\" and "
                                         "ending in \".cpp\")\nSeparate multiple masks with \";\":"),
-                                      _("Wildcard selection"), wxString(), this);
+                                        _("Wildcard selection"));
     if (wild.IsEmpty())
         return;
 

@@ -271,9 +271,7 @@ class CompilerGCC : public cbCompilerPlugin
         typedef std::vector<CompilerProcess> CompilerProcessList;
         CompilerProcessList m_CompilerProcessList;
 
-        /// List of targets contained in the active project (virtual and real).
-        /// Contains only targets supported by the current platform.
-        wxArrayString       m_Targets;
+        wxArrayString       m_Targets; // list of targets contained in the active project
         int                 m_RealTargetsStartIndex;
         int                 m_RealTargetIndex;
 

@@ -23,7 +23,7 @@
 // Modified Keybinder for CodeBlocks KeyBnder v2.0
 
 // --Version-Rlease-Feature-Fix-------
-#define VERSION "2.0.12 2020/03/23"
+#define VERSION "2.0.11 2020/03/2"
 // -----------------------------------
 class wxKeyConfigPanel;
 class wxKeyProfileArray;
@@ -688,7 +688,4 @@ class cbKeyBinder : public cbPlugin
 //
 //          Set the global accelerators has table before Initilaize/Update() else globals are missed on the
 //          first invocation of KeyBinder/Configure.
-// ----------------------------------------------------------------------------
-//  Commit 2.0.12 2020/03/23
-//          Match .conf and menu structure (by menu titles) to replace old menu ids with newer.
 // ----------------------------------------------------------------------------

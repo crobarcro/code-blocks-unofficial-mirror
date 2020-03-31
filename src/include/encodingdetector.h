@@ -9,18 +9,19 @@
 #include "settings.h"
 #include "filemanager.h"
 #include <wx/fontmap.h>
+#include "nsUniversalDetector.h"
 
 class wxString;
 
 /** Try to detect the encoding of a file on disk. */
-class DLLIMPORT EncodingDetector
+class DLLIMPORT EncodingDetector : public nsUniversalDetector
 {
     public:
         EncodingDetector(const wxString& filename, bool useLog=true);
         EncodingDetector(LoaderBase* fileLdr, bool useLog=true);
         EncodingDetector(const wxByte* buffer, size_t size, bool useLog=true);
         EncodingDetector(const EncodingDetector& rhs, bool useLog=true);
-        ~EncodingDetector();
+        ~EncodingDetector() override;
 
         /** @return True if file was read, false if not. */
         bool IsOK() const;
@@ -31,12 +32,23 @@ class DLLIMPORT EncodingDetector
         /** @return The detected encoding. Currently ISO8859-1 is returned if no BOM is present. */
         wxFontEncoding GetFontEncoding() const;
         wxString GetWxStr() const;
-    private:
-        wxString m_ConvStr;
+    protected:
+        /** @return True if succeeded, false if not (e.g. file didn't exist). */
+        bool DetectEncoding(const wxString& filename, bool convert_to_wxstring = true);
+        bool DetectEncoding(const wxByte* buffer, size_t size, bool convert_to_wxstring = true);
+        bool DetectEncodingEx(const wxByte* buffer, size_t len);
+        void Report(const char* aCharset) override;
+
+        bool           m_IsOK;
+        bool           m_UseBOM;
+        bool           m_UseLog;
+        int            m_BOMSizeInBytes;
         wxFontEncoding m_Encoding;
-        int m_BOMSizeInBytes;
-        bool m_IsOK;
-        bool m_UseBOM;
+    private:
+        bool ConvertToWxString(const wxByte* buffer, size_t size);
+
+        wxString m_MozillaResult;
+        wxString m_ConvStr;
 };
 
 #endif // ENCODINGDETECTOR_H

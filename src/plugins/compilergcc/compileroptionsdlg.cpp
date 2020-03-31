@@ -2152,9 +2152,8 @@ void CompilerOptionsDlg::OnAddCompilerClick(cb_unused wxCommandEvent& event)
     wxChoice* cmb = 0;
     cmb = XRCCTRL(*this, "cmbCompiler", wxChoice);
     wxString value = cbGetTextFromUser(_("Please enter the new compiler's name:"),
-                                       _("Add new compiler"),
-                                       _("Copy of ") + CompilerFactory::GetCompiler(m_CurrentCompilerIdx)->GetName(),
-                                       this);
+                                    _("Add new compiler"),
+                                    _("Copy of ") + CompilerFactory::GetCompiler(m_CurrentCompilerIdx)->GetName());
     if (!value.IsEmpty())
     {
         // make a copy of current compiler
@@ -2197,8 +2196,7 @@ void CompilerOptionsDlg::OnAddCompilerClick(cb_unused wxCommandEvent& event)
 void CompilerOptionsDlg::OnEditCompilerClick(cb_unused wxCommandEvent& event)
 {
     wxChoice* cmb = XRCCTRL(*this, "cmbCompiler", wxChoice);
-    wxString value = cbGetTextFromUser(_("Please edit the compiler's name:"), _("Rename compiler"),
-                                       cmb->GetStringSelection(), this);
+    wxString value = cbGetTextFromUser(_("Please edit the compiler's name:"), _("Rename compiler"), cmb->GetStringSelection());
     if (!value.IsEmpty())
     {
         Compiler* compiler = CompilerFactory::GetCompiler(m_CurrentCompilerIdx);
