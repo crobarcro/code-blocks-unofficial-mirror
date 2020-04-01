@@ -141,6 +141,7 @@ XPStyle on
 # Included files
 !include MUI2.nsh
 !include Sections.nsh
+!include x64.nsh
 
 # Reserved Files
 ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
@@ -162,7 +163,7 @@ ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
 # Installer attributes (usually these do not change)
 # Note: We can't always use "Code::Blocks" as the "::" conflicts with the filesystem.
 OutFile           setup.exe
-InstallDir        $PROGRAMFILES\CodeBlocks
+InstallDir        $PROGRAMFILES64\CodeBlocks
 Caption           "Code::Blocks Installation"
 CRCCheck          on
 XPStyle           on
