@@ -50,7 +50,7 @@ XPStyle on
 
 # The following line toggles whether the MinGw DLL's shall be included
 # in the release. These are needed, if C::B is not compiled statically.
-!define MINGW_DLLS
+#!define MINGW_DLLS
 
 # The following line toggles whether the installer includes the
 # CBLauncher tool for portable settings (AppData in the C::B folder).
@@ -79,11 +79,11 @@ XPStyle on
 ###########
 # Possibly required to adjust manually:
 # (Folder with wxWidgets DLL - unicode, monolithic.)
-!define WX_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003
+!define WX_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003_32
 !define WX_VER           313
 # Possibly required to adjust manually:
 # (CodeBlocks binary folder - the one where codeblocks.exe is.)
-!define CB_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003
+!define CB_BASE          D:\Devel\CodeBlocks\Releases\CodeBlocks_2003_32
 !define CB_SHARE         \share
 !define CB_SHARE_CB      ${CB_SHARE}\CodeBlocks
 !define CB_DOCS          ${CB_SHARE_CB}\docs
@@ -98,7 +98,7 @@ XPStyle on
 !define CB_XML_COMPILERS ${CB_SHARE_CB}\compilers
 # Possibly required to adjust manually:
 # (Folder with full MinGW/GCC installation, *including* debugger.)
-!define MINGW_BASE       D:\Devel\CodeBlocks\Releases\CodeBlocks_2003\MinGW
+!define MINGW_BASE       D:\Devel\CodeBlocks\Releases\CodeBlocks_2003_32\MinGW
 # Possibly required to adjust manually:
 # (Folder with logos and GPL license as text file.)
 !define CB_ADDONS        D:\Devel\CodeBlocks\Releases\Setup
@@ -141,7 +141,6 @@ XPStyle on
 # Included files
 !include MUI2.nsh
 !include Sections.nsh
-!include x64.nsh
 
 # Reserved Files
 ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
@@ -163,7 +162,7 @@ ReserveFile "${NSISDIR}\Plugins\x86-ansi\AdvSplash.dll"
 # Installer attributes (usually these do not change)
 # Note: We can't always use "Code::Blocks" as the "::" conflicts with the filesystem.
 OutFile           setup.exe
-InstallDir        $PROGRAMFILES64\CodeBlocks
+InstallDir        $PROGRAMFILES32\CodeBlocks
 Caption           "Code::Blocks Installation"
 CRCCheck          on
 XPStyle           on
@@ -244,8 +243,8 @@ doInstall:
             Abort
 accessOK:
         SetOverwrite on
-        File ${WX_BASE}\wxmsw${WX_VER}u_gcc_cb.dll
-        File ${WX_BASE}\wxmsw${WX_VER}u_gl_gcc_cb.dll
+        File ${WX_BASE}\wxmsw${WX_VER}u_gcc_custom.dll
+        File ${WX_BASE}\wxmsw${WX_VER}u_gl_gcc_custom.dll
         File ${CB_BASE}\Addr2LineUI.exe
         File ${CB_BASE}\cb_console_runner.exe
         File ${CB_BASE}\CbLauncher.exe
@@ -2582,8 +2581,8 @@ Section "-un.Core Files (required)" UNSEC_CORE
     Delete /REBOOTOK $INSTDIR\CbLauncher.exe
     Delete /REBOOTOK $INSTDIR\cb_console_runner.exe
     Delete /REBOOTOK $INSTDIR\Addr2LineUI.exe
-    Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gl_gcc_cb.dll
-    Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gcc_cb.dll
+    Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gl_gcc_custom.dll
+    Delete /REBOOTOK $INSTDIR\wxmsw${WX_VER}u_gcc_custom.dll
 !if ${WX_VER} == 28
     Delete /REBOOTOK $INSTDIR\wxpropgrid.dll
 !endif
