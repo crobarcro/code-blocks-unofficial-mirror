@@ -37,7 +37,7 @@ La barre d'état donne un aperçu des paramétrages suivants :
 
 \section{Vue du projet}\label{sec:categories}
 
-Dans \codeblocks, les sources et les paramètres d'un processus de génération sont stockés dans un fichier projet \file{\var{name}.cbp}. Les sources en C/C++ et les fichiers d'entêtes correspondants (ou headers) sont les composants typiques d'un projet. La façon la plus simple de créer un projet est de passer par la commande \menu{Fichier,Projet} et de choisir un assistant. Vous pouvez alors ajouter des fichiers au projet via le menu de contexte \menu{Ajouter des fichiers} de la fenêtre de gestion. 
+Dans \codeblocks, les sources et les paramètres d'un processus de génération sont stockés dans un fichier projet \file{\var{name}.cbp}. Les sources en C/C++ et les fichiers d'en-têtes correspondants (ou headers) sont les composants typiques d'un projet. La façon la plus simple de créer un projet est de passer par la commande \menu{Fichier,Projet} et de choisir un assistant. Vous pouvez alors ajouter des fichiers au projet via le menu de contexte \menu{Ajouter des fichiers} de la fenêtre de gestion. 
 
 \codeblocks gère les fichiers de projets en catégories qui dépendent de l'extension des fichiers. Les catégories suivantes sont prédéfinies :
 
@@ -86,17 +86,17 @@ Dans \codeblocks on peut effectuer des opérations complémentaires avant et apr
 
 Créer le désassemblage d'un objet sous Windows. Le transfert vers un fichier nécessite l'appel à \cmdline{cmd} avec l'option \opt{/c}.
 
-\begin{cmd}
+\begin{lstlisting}
 cmd /c objdump -D name.elf > name.dis
-\end{cmd}
+\end{lstlisting}
 
 Un autre exemple de Post génération peut être l'archivage d'un projet. Pour cela, créez une cible de génération \samp{Archive} et incluez les instructions suivantes dans l'étape de post génération :
 
-\begin{cmd}
+\begin{lstlisting}
 zip -j9 $(PROJECT_NAME)_$(TODAY).zip src h obj $(PROJECT_NAME).cbp
-\end{cmd}
+\end{lstlisting}
 
-Avec cette commande, le projet actif et ses sources, entêtes et objets seront compressés en tant que fichier zip. En faisant ainsi, les variables intégrées \codeline{$(PROJECT_NAME)} et \codeline{$(TODAY)}, le nom du projet et la date courante seront extraites (voir \pxref{sec:builtin_variables}). Après l'exécution de la cible \samp{Archive}, le fichier compressé sera stocké dans le répertoire du projet.
+Avec cette commande, le projet actif et ses sources, en-têtes et objets seront compressés en tant que fichier zip. En faisant ainsi, les variables intégrées \codeline{$(PROJECT_NAME)} et \codeline{$(TODAY)}, le nom du projet et la date courante seront extraites (voir \pxref{sec:builtin_variables}). Après l'exécution de la cible \samp{Archive}, le fichier compressé sera stocké dans le répertoire du projet.
 
 Dans le répertoire \file{share/codeblocks/scripts} vous trouverez quelques exemples de scripts. Vous pouvez ajouter un script via le menu \menu{Paramètres,Édition de scripts} et l'enregistrer dans un menu. Si vous exécutez par exemple le  script \file{make\_dist} depuis le menu, alors tous les fichiers appartenant à un projet seront compressés dans une archive \file{\var{project}.tar.gz}.
 
@@ -125,9 +125,9 @@ Dans la fenêtre Gestion d'une vue de projet, les fichiers en Assembleur sont af
 \item Sélectionner le compilateur dans \samp{Pour ce compilateur}
 \item Sélectionner \samp{Utiliser des commandes personnalisées pour générer ce fichier}
 \item Dans la fenêtre, entrez :
-\begin{code}
+\begin{lstlisting}
 $compiler $options $includes <asopts> -c $file -o $object
-\end{code}
+\end{lstlisting}
 \end{enumerate}
 
 Les variables de \codeblocks sont identifiées par un \codeline{$} (voir \pxref{sec:command_macros}). Elles sont automatiquement configurées, ainsi vous n'avez à remplacer que l'option de l'assembleur \var{asopt} par vos propres configurations.
@@ -140,23 +140,23 @@ Cette section regroupe des fonctions internes à l'éditeur
 \subsection{Code par Défaut}
 \end{samepage}
 
-Les règles de codage dans une compagnie imposent d'avoir un modèle standard. Avec \codeblocks, il est possible d'inclure un contenu prédéfini automatiquement en début de fichier lors de la création d'une nouvelle source C/C++ ou d'entêtes (headers). Le contenu prédéfini est dénommé code par défaut. Cette configuration peut être sélectionnée dans  \menu{Paramètres,Éditeur} Code par Défaut. Si vous créez un nouveau fichier alors une expansion des variables macro, notamment celles de \menu{Paramètres,Variables Globales}, est effectuée. Un nouveau fichier peut être créé via le menu \menu{Fichier,Nouveau,Fichier}.
+Les règles de codage dans une compagnie imposent d'avoir un modèle standard. Avec \codeblocks, il est possible d'inclure un contenu prédéfini automatiquement en début de fichier lors de la création d'une nouvelle source C/C++ ou d'en-têtes (headers). Le contenu prédéfini est dénommé code par défaut. Cette configuration peut être sélectionnée dans  \menu{Paramètres,Éditeur} Code par Défaut. Si vous créez un nouveau fichier alors une expansion des variables macro, notamment celles de \menu{Paramètres,Variables Globales}, est effectuée. Un nouveau fichier peut être créé via le menu \menu{Fichier,Nouveau,Fichier}.
 
 \genterm{Exemple}
 
-\begin{code}
-/*************************************************************************
+\begin{lstlisting}
+/***************************************************************
  *  Project: $(project)
  *  Function:
- *************************************************************************
+ ***************************************************************
  *  $Author: mario $
  *  $Name:  $
- *************************************************************************
+ ***************************************************************
  *
  *  Copyright 2007 by company name
  *
- ************************************************************************/
-\end{code}
+ ***************************************************************/
+\end{lstlisting}
 
 \subsection{Abréviations}\label{sec:Abbreviations}
 
@@ -200,11 +200,11 @@ Si vous sélectionnez l'espace de travail ou un projet particulier de l'espace d
 
 \screenshot[H][width=.45\columnwidth]{project_find_file}{Recherche de fichiers}
 
-Dans \codeblocks vous pouvez facilement naviguer entre les Entêtes/Sources en :
+Dans \codeblocks vous pouvez facilement naviguer entre les En-têtes/Sources en :
 
 \begin{enumerate}
-\item Positionnant le curseur à l'endroit où le fichier d'entête (header) est inclus puis ouvrir ce fichier via le menu de contexte \menu{Ouvrir le fichier inclus} (voir \pxref{fig:open_header})
-\item Basculer du fichier d'entête au fichier source via le menu de contexte \menu{Basculer en-tête/source}
+\item Positionnant le curseur à l'endroit où le fichier d'en-tête (header) est inclus puis ouvrir ce fichier via le menu de contexte \menu{Ouvrir le fichier inclus} (voir \pxref{fig:open_header})
+\item Basculer du fichier d'en-tête au fichier source via le menu de contexte \menu{Basculer en-tête/source}
 \item Sélectionner par exemple un define dans l'éditeur et choisir \menu{Trouver la déclaration} depuis le menu de contexte pour ouvrir le fichier contenant cette déclaration.
 \end{enumerate}
 
@@ -271,9 +271,9 @@ Si vous avez inclus plusieurs fichiers d'aide, vous pouvez choisir un terme part
 
 Dans \codeblocks vous pouvez également ajouter un support de pages "man". Ajoutez seulement une entrée \menu{man} et spécifiez les chemins comme suit (NdT ici pour Linux!).
 
-\begin{cmd}
+\begin{lstlisting}
 man:/usr/share/man
-\end{cmd}
+\end{lstlisting}
 
 Sous Linux, les pages man sont habituellement installées de toute façon. Sous Windows vous pourriez vouloir les télécharger, par ex. depuis ici : \url{http://www.win.tue.nl/~aeb/linux/man}
 
@@ -291,7 +291,7 @@ Sous Linux, les pages man sont habituellement installées de toute façon. Sous 
 
 \screenshot{embedded_html_viewer}{Visualiseur HTML intégré}
 
-\hint{Si vous sélectionnez un fichier html par double clic dans l'explorateur (voir \pxref{sec:file_explorer}) alors le visualiseur html intégré sera démarré, du moins si aucune association vers les fichiers html n'est faite par le gestionnaire d'extensions de fichiers.}
+\hint{Si vous sélectionnez un fichier html par double-clic dans l'explorateur (voir \pxref{sec:file_explorer}) alors le visualiseur html intégré sera démarré, du moins si aucune association vers les fichiers html n'est faite par le gestionnaire d'extensions de fichiers.}
 
 \textbf{Fichiers CHM}
 
@@ -327,25 +327,25 @@ Les échanges de données entre \codeblocks et d'autres applications sont possib
 
 Avec cette interface, différentes commandes peuvent être envoyées vers une instance de \codeblocks en suivant la syntaxe suivante.
 
-\begin{code}
+\begin{lstlisting}
 [<command>("<parameter>")]
-\end{code}
+\end{lstlisting}
 
 Les commandes suivantes sont actuellement disponibles :
 
 \begin{codeentry}
 \item[Open] La commande
 
-\begin{code}
+\begin{lstlisting}
 [Open("d:\temp\test.txt")]
-\end{code}
+\end{lstlisting}
 
 utilise un paramètre, dans notre cas c'est le nom d'un fichier avec son chemin en absolu, et il s'ouvre dans une instance existante de \codeblocks ou bien, si nécessaire, une première instance démarre.
 \item[OpenLine] Cette commande ouvre un fichier dans une instance de \codeblocks et se positionne sur la ligne dont le numéro est entré. Le numéro de ligne est spécifié par \codeline{:ligne}.
 
-\begin{code}
+\begin{lstlisting}
 [OpenLine("d:\temp\test.txt:10")]
-\end{code}
+\end{lstlisting}
 
 \item[Raise] Donne le "focus" à l'instance de \codeblocks. Aucun paramètre ne doit être entré.
 \end{codeentry}
@@ -371,15 +371,15 @@ L'accès et l'étendue des variables d'environnement ainsi créées sont limité
 
 Vous pouvez écrire dans un fichier \file{\var{project}.env} l'environnement utilisé dans une étape de post génération (voir \pxref{sec:pre_postbuild}) puis l'archiver dans votre projet.
 
-\begin{cmd}
+\begin{lstlisting}
 cmd /c echo \%PATH\%  > project.env
-\end{cmd}
+\end{lstlisting}
 
 ou sous Linux
 
-\begin{cmd}
+\begin{lstlisting}
 echo \$PATH > project.env
-\end{cmd}
+\end{lstlisting}
 
 \subsection{Basculer entre diverses dispositions}
 
@@ -440,11 +440,11 @@ l'éditeur par un signe moins. Dans la marge, le début et la fin d'un point de 
 
 Une autre façon de faire est de définir des points de repliement utilisateurs. Le point de départ du repliement s'entre comme un commentaire suivi d'une parenthèse ouvrante et la fin comme un commentaire suivi d'une parenthèse fermante.
 
-\begin{code}
+\begin{verbatim}
 //{
 code avec repliement défini par l'utilisateur
 //}
-\end{code}
+\end{verbatim}
 
 \subsection{Auto complétion}
 
@@ -485,9 +485,9 @@ Vous pouvez alors soit utiliser les applications assignées par Windows pour cha
 
 L'Environnement de Développement Intégré (IDE) \codeblocks peut être exécuté depuis une ligne de commande sans interface graphique. Dans ce cas, plusieurs options sont disponibles pour contrôler le processus de génération d'un projet. Comme \codeblocks peut être piloté par des "scripts", la création d'exécutables peut être intégrée dans vos propres processus de travail.
 
-\begin{cmd}
+\begin{lstlisting}
 codeblocks.exe /na /nd --no-splash-screen --build <name>.cbp --target='Release'
-\end{cmd}
+\end{lstlisting}
 
 \begin{optentry}
 \item[\var{filename}] Spécifie le nom du fichier de projet \file{*.cbp} ou le nom de l'espace de travail \file{*.workspace}. Par exemple, \var{filename} peut être \file{project.cbp}. Placez cet argument en fin de ligne de commande, juste avant la redirection de la sortie, s'il y en a une.

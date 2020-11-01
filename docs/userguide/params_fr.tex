@@ -126,15 +126,15 @@ La variable est remplacée par la commande effective du Système d'exploitation.
 \item[\$(RANDOM)] Un nombre positif aléatoire sur 16 bits (0-65535)
 \end{codeentry}
 
-\subsection{Standard path}
+\subsection{Chemins Standard}
 
 \begin{codeentry}
-\item[\$(GET\_DATA\_DIR)] Unix: prefix/share/appname Windows: chemin EXE
-\item[\$(GET\_LOCAL\_DATA\_DIR)] Unix: /etc/appname Windows: chemin EXE
-\item[\$(GET\_CONFIG\_DIR)] Unix: /etc Windows: \file{C:\osp Documents and Settings\osp All Users\osp Application Data}
-\item[\$(GET\_USER\_CONFIG\_DIR)] Unix: ~ Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data\osp appname}
-\item[\$(GET\_USER\_DATA\_DIR)] Unix: ~/.appname Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data}
-\item[\$(GET\_USER\_LOCAL\_DATA\_DIR)] Unix: ~/.appname Windows: \file{C:\osp Documents and Settings\osp username\osp Local Settings\osp Application Data\osp appname}
+\item[\$(GET\_DATA\_DIR)] Unix: prefix/share/appname ; Windows: chemin EXE
+\item[\$(GET\_LOCAL\_DATA\_DIR)] Unix: /etc/appname ; Windows: chemin EXE
+\item[\$(GET\_CONFIG\_DIR)] Unix: /etc ; Windows: \file{C:\osp Documents and Settings\osp All Users\osp Application Data}
+\item[\$(GET\_USER\_CONFIG\_DIR)] Unix: ~ ; Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data\osp appname}
+\item[\$(GET\_USER\_DATA\_DIR)] Unix: ~/.appname ; Windows: \file{C:\osp Documents and Settings\osp username\osp Application Data}
+\item[\$(GET\_USER\_LOCAL\_DATA\_DIR)] Unix: ~/.appname ; Windows: \file{C:\osp Documents and Settings\osp username\osp Local Settings\osp Application Data\osp appname}
 \item[\$(GET\_TEMP\_DIR)] TOUTES plateformes: Un répertoire temporaire accessible en écriture
 \end{codeentry}
 
@@ -153,9 +153,9 @@ Ce sont des fonctions macro pour simplifier la génération des chemins
 
 \subsection{Évaluation Conditionnelle}
 
-\begin{code}
+\begin{lstlisting}
 $if(condition){clause si vraie}{clause si fausse}
-\end{code}
+\end{lstlisting}
 
 L'évaluation Conditionnelle sera considérée comme vraie dans les cas suivants
 
@@ -179,10 +179,10 @@ L'évaluation Conditionnelle sera considérée comme fausse dans les cas suivant
 
 Par exemple : vous utilisez plusieurs plateformes et vous voulez configurer différents paramètres en fonction du système d'exploitation. Dans le code suivant, la commande de script \codeline{[[ ]]} est évaluée et la \var{commande} sera exécutée. Ce peut être utile dans une étape de post-génération.
 
-\begin{code}
+\begin{lstlisting}
 [[ if (PLATFORM ==  PLATFORM_MSW) { print (_T("cmd /c")); } else 
       { print (_T("sh ")); } ]] <commande>
-\end{code}
+\end{lstlisting}
 
 \section{Expansion de script}
 
@@ -192,9 +192,9 @@ Pour une flexibilité maximale, vous pouvez imbriquer les scripts en utilisant l
 
 \genterm{Exemple avec Backticks}
 
-\begin{cmd}
+\begin{lstlisting}
 objdump -D `find . -name *.elf` > name.dis
-\end{cmd}
+\end{lstlisting}
 
 L'expression entre "backticks" (ou apostrophes inversées) retourne une liste de tous les exécutables \file{*.elf} des sous-répertoires. Le résultat de cette expression peut être utilisé directement par \cmdline{objdump}. Au final, la sortie est redirigée vers un fichier nommé \file{name.dis}. Ainsi, des processus peuvent être automatisés simplement sans avoir recours à aucune boucle.
 
@@ -204,9 +204,9 @@ Le texte du script est remplacé par toute sortie générée par votre script, o
 
 Comme l'évaluation conditionnelle est exécutée avant l'expansion de scripts, l'évaluation conditionnelle peut être utilisée pour les fonctionnalités de type pré-processeur. Les variables internes (et les variables utilisateur) sont étendues en sortie de scripts, aussi on peut référencer des variables dans les sorties d'un script.
 
-\begin{code}
+\begin{lstlisting}
 [[ print(GetProjectManager().GetActiveProject().GetTitle()); ]]
-\end{code}
+\end{lstlisting}
 
 insère le titre du projet actif dans la ligne de commande.
 
@@ -233,16 +233,16 @@ insère le titre du projet actif dans la ligne de commande.
 
 \section{Compilation d'un fichier unique}
 
-\begin{code}
+\begin{lstlisting}
 $compiler $options $includes -c $file -o $object
-\end{code}
+\end{lstlisting}
 
 \section{Édition de liens de fichiers objets en exécutable}
 
-\begin{code}
+\begin{lstlisting}
 $linker $libdirs -o $exe_output $link_objects $link_resobjects 
 $link_options $libs
-\end{code}
+\end{lstlisting}
 
 \section{Variables globales du compilateur}\label{sec:global_variables}
 
@@ -318,8 +318,8 @@ Supprimer un ensemble supprimera également toutes les variables de cet ensemble
 
 Comme décrit auparavant, écrire \codeline{$(#var.include)} et \codeline{$(#var)/include} revient à la même chose par défaut. Aussi pourquoi donc écrire quelque chose d'aussi non intuitif que \codeline{$(#var.include)}?
 
-Prenons l'exemple d'une installation standard de Boost sous Windows. Généralement, vous vous attendriez à ce qu'un package fictif ACME ait ses fichiers include dans ACME/include et ses librairies dans ACME/lib. Optionnellement, il pourrait mettre ses entêtes (headers) dans un autre sous répertoire appelé acme. Ainsi après avoir ajouté les chemins corrects dans les options du compilateur et de l'éditeur de liens, vous pouvez vous attendre à \codeline{\#include <acme/acme.h>} et éditer les liens avec \file{libacme.a} (ou quelque chose de ce genre).
+Prenons l'exemple d'une installation standard de Boost sous Windows. Généralement, vous vous attendriez à ce qu'un package fictif ACME ait ses fichiers include dans ACME/include et ses librairies dans ACME/lib. Optionnellement, il pourrait mettre ses en-têtes (headers) dans un autre sous répertoire appelé acme. Ainsi après avoir ajouté les chemins corrects dans les options du compilateur et de l'éditeur de liens, vous pouvez vous attendre à \codeline{\#include <acme/acme.h>} et éditer les liens avec \file{libacme.a} (ou quelque chose de ce genre).
 
-Boost, cependant, installe les entêtes dans \file{C:\osp Boost\osp include\osp boost-1\_33\_1\osp boost} et ses librairies dans \file{C:\osp Boost\osp lib} par défaut. Il semble impossible d'obtenir ceci simplement sans devoir tout ajuster sur chaque nouveau PC, particulièrement si vous devez travailler sous Linux mais aussi avec un autre OS.
+Boost, cependant, installe les en-têtes dans \file{C:\osp Boost\osp include\osp boost-1\_33\_1\osp boost} et ses librairies dans \file{C:\osp Boost\osp lib} par défaut. Il semble impossible d'obtenir ceci simplement sans devoir tout ajuster sur chaque nouveau PC, particulièrement si vous devez travailler sous Linux mais aussi avec un autre OS.
 
 C'est là que la véritable puissance des variables globales utilisateur se révèle. Quand vous définissez la valeur de la variable \codeline{#boost}, vous allez juste un cran plus loin que d'habitude. Vous définissez le membre include comme \file{C:\osp Boost\osp include\osp boost-1\_33\_1\osp boost} et le membre lib comme \file{C:\osp Boost\osp lib}, respectivement. Votre projet utilisant \codeline{$(#boost.include)} et \codeline{$(#boost.lib)} travaillera comme par magie correctement sur tout PC sans aucune modifications. Vous n'avez pas besoin de savoir pourquoi, vous ne voulez pas savoir pourquoi.

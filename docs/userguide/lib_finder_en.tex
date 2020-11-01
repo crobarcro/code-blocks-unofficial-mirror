@@ -47,9 +47,9 @@ You can filter libraries known to LibFinder by providing search filter. The \men
 
 If you want to add library which is not available in LibFinder's database, you may use \menu{Unknown Library} field. Note that you should enter library's shortcode (which usually matches global variable name) or name of library in pkg-config. List of suggested shortcodes can be found at \href{http://wiki.codeblocks.org/index.php?title=Recommended_global_variables}{Global Variables}. Using this option is recommended only when preparing project to be built on other machines where such library exists and is properly detected by LibFinder. You can access a global variable within \codeblocks like:
 
-\begin{code}
+\begin{lstlisting}
 $(#GLOBAL_VAR_NAME.include)
-\end{code}
+\end{lstlisting}
 
 Checking the \menu{Don't setup automatically} option will notify LibFinder that it should not add libraries automatically while compiling this project. In such case, LibFinder can be invoked from build script. Example of such script is generated and added to project by pressing \menu{Add manual build script}.
 

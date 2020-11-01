@@ -85,25 +85,25 @@ This is the same as placing the command in a batch or shell script, then running
 \item Windows Explorer
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 explorer /select,"$(PROJECTFILE)"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 explorer /select,"$path"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \item Dolphin
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 dolphin --select "$(PROJECTFILE)"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 dolphin --select "$path"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \hint{The following three Context Menu commands only support folders (but not files).}
@@ -111,37 +111,37 @@ dolphin --select "$path"
 \item Nautilus
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 nautilus --no-desktop --browser "$(PROJECTDIR)"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 nautilus --no-desktop --browser "$dir"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \item Thunar
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 thunar "$(PROJECTDIR)"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 thunar "$dir"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \item PCMan File Manager
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 pcmanfm "$(PROJECTDIR)"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 pcmanfm "$dir"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 \end{itemize}
 
@@ -151,25 +151,25 @@ pcmanfm "$dir"
 \item Windows
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 "path_to_svn\bin\svn" update "$inputstr{Directory}"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 "path_to_svn\bin\svn" update "$dir"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \item Linux
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 svn update "$inputstr{Directory}"
-\end{cmd}
+\end{verbatim}
 \item Context Menu
-\begin{cmd}
+\begin{verbatim}
 svn update "$dir"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 \end{itemize}
 
@@ -181,17 +181,17 @@ svn update "$dir"
 \item Windows
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 "path_to_cbp2make\cbp2make" -in "$(PROJECTFILE)"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 
 \item Linux
 \begin{itemize}
 \item Tools Menu
-\begin{cmd}
+\begin{verbatim}
 "path_to_cbp2make/cbp2make" -in "$(PROJECTFILE)"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 \end{itemize}
 
@@ -201,15 +201,15 @@ svn update "$dir"
 \item Windows
 \begin{itemize}
 \item 7z or zip - Tools Menu (on a single line)
-\begin{cmd}
+\begin{verbatim}
 "path_to_7z\7z" a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate
      -mmt=on -mx9 -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 
      -md=64m -mfb=64 -ms=on} -sccUTF-8 "-w$(PROJECTDIR).."
      "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*"
-\end{cmd}
+\end{verbatim}
 
 \item tar.gz or tar.bz2 - Tools Menu (on a single line)
-\begin{cmd}
+\begin{verbatim}
 cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).."
       "$(PROJECTDIR)..\$(PROJECT_NAME)" "$(PROJECTDIR)*" && 
       "path_to_7z\7z" a -t$if(gz == $inputstr{gz or bz2?}){gzip -mx9 
@@ -219,7 +219,7 @@ cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).."
       "$(PROJECTDIR)..\$(PROJECT_NAME).tar.bz2}"
       "$(PROJECTDIR)..\$(PROJECT_NAME).tar" && 
        cmd /c del "$(PROJECTDIR)..\$(PROJECT_NAME).tar""
-\end{cmd}
+\end{verbatim}
 
 \hint{The Windows command line interpreter has been invoked directly here (\cmdline{cmd /c}), allowing for multiple commands to be chained in a single line. However, this causes the command to fail to execute in the \codeblocks Console.}
 
@@ -228,16 +228,16 @@ cmd /c ""path_to_7z\7z" a -ttar -mx0 -sccUTF-8 "-w$(PROJECTDIR).."
 \item Linux
 \begin{itemize}
 \item 7z or zip - Tools Menu
-\begin{cmd}
+\begin{verbatim}
 7z a -t$if(zip == $inputstr{7z or zip?}){zip -mm=Deflate -mmt=on -mx9
     -mfb=128 -mpass=10}{7z -m0=LZMA -mx9 -md=64m -mfb=64 -ms=on}
     -sccUTF-8 "-w$(PROJECTDIR).." "$(PROJECTDIR)../$(PROJECT_NAME)"
     "$(PROJECTDIR)*"
-\end{cmd}
+\end{verbatim}
 \item tar.gz or tar.bz2 - Tools Menu
-\begin{cmd}
+\begin{verbatim}
 tar -cf "$(PROJECTDIR)../$(PROJECT_NAME).tar.$if(gz == $inputstr{gz 
      or bz2?}){gz" -I 'gzip}{bz2" -I 'bzip2} -9' "$(PROJECTDIR)*"
-\end{cmd}
+\end{verbatim}
 \end{itemize}
 \end{itemize}

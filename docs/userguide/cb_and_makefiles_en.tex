@@ -35,7 +35,7 @@ Here's a copy of a build file for the basic Wxwidgets program as described above
 \hint{for a better lisibility, long lines have been split. The \codeline{^} sign indicates a continuation line in DOS mode, and \osp \ sign indicates a continuation line in a makefile. But you should have commands on only one line as long as you remove continuation line signs}
 
 
-\begin{code}
+\begin{verbatim}
 
 mingw32-make.exe -f test.mak test.exe
 
@@ -59,11 +59,11 @@ mingw32-g++.exe -LC:\PF\wxWidgets2.8\lib\gcc_dll -o bin\Debug\test.exe          
 
 Process terminated with status 0 (0 minutes, 12 seconds)
 0 errors, 0 warnings
-\end{code}
+\end{verbatim}
 
 The above can be converted to the makefile below. I have deliberately left it fairly close to the HTML file output.
 
-\begin{code}
+\begin{verbatim}
 # test program makefile
 
 Incpath1 = C:\PF\wxWidgets2.8\include
@@ -112,11 +112,11 @@ obj\Debug\resource.coff : C:\Development\test\resource.rc
 #    obj\Debug\testApp.o obj\Debug\testMain.o                                   ^
 #    obj\Debug\resource.res -lwxmsw28ud -mwindows
 
-\end{code}
+\end{verbatim}
 
 I have written a generic makefile which I have only tested on Windows Vista but that should work with any project started as described above. You have to change the name of the project and set the paths as appropriate (you will probably only need to change Ppath and WXpath).
 
-\begin{code}  
+\begin{verbatim}  
 
 # Generic program makefile
 # -- assumes that you name your directory with same name as the project file
@@ -161,7 +161,7 @@ $(Opath)\resource.coff : C:\Development\$(Proj)\resource.rc
 
 clean:
     del $(Bpath)\$(Proj).exe $(Obj) $(Opath)\resource.coff
-\end{code}
+\end{verbatim}
 
 \hint{exporting a makefile of a \codeblocks project is indirectly possible. This can be achieved with cbp2make utility (see the description in \pxref{sec:cbp2make} and/or a usage exemple via Tool+ \pxref{sec:tool_cbp2make}.}
 

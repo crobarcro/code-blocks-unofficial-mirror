@@ -18,11 +18,11 @@ Un autre ajout utile se trouve dans \menu{Projet,Arbre des projets,Éditer les t
 
 En supposant que vous voulez éditer le makefile depuis CB, vous devez vous assurer que l'éditeur utilise bien des tabulations (plutôt que des espaces). C'est un problème générique de l'utilitaire make car il a besoin de commencer des lignes de commandes par un caractère tab alors que de nombreux éditeurs remplacent les tabulations par des espaces. Pour obtenir cela dans CB, ouvrez la fenêtre \menu{Paramètres,Éditeur} et cocher la case pour utiliser le caractère de tabulation (tab).
 
-Les problèmes réels commencent toutefois maintenant. La génération automatique de CB ajoute toutes les entêtes des wxWidgets, mais si vous utilisez un makefile, tout cela n'est pas fait et vous aurez à le faire vous-même.
+Les problèmes réels commencent toutefois maintenant. La génération automatique de CB ajoute toutes les en-têtes des wxWidgets, mais si vous utilisez un makefile, tout cela n'est pas fait et vous aurez à le faire vous-même.
 
 Heureusement CB possède une autre fonctionnalité qui peut venir à votre secours. Si vous allez dans le menu \menu{Paramètres,Compilateur et Débugueur}, déplacez les onglets horizontalement vers la droite, vous trouverez l'onglet ‘autres paramètres’. Là, cliquez sur la case à cocher  'Enregistrer la génération en HTML ...'. Ceci permettra à CB de créer, au moment de la génération, un fichier HTML qui enregistrera toutes les commandes de génération.
 
-\hint{cette façon de créer un fichier html de génération n'existe plus dans les versions récentes de CB, mais il y a d'autres solutions}
+\hint{Cette façon de créer un fichier html de génération n'existe plus dans les versions récentes de CB, mais il y a d'autres solutions}
 
 Si vous compilez (sans utiliser un makefile - donc si vous avez déjà tout remis à plat - désolé) le programme minimal par défaut utilisant wxWidgets, vous pouvez voir les commandes de compilation et d'édition de liens qui produisent ce fichier.
 
@@ -32,10 +32,10 @@ Vous ne pouvez pas simplement le copier depuis le visualiseur HTML de CB (il n'y
 
 Voici une copie d'un fichier de génération pour un programme wxWidgets de base tel que décrit ci-dessus.
 
-\hint{pour une meilleure lisibilité, les lignes trop longues ont été découpées. Le signe \codeline{^}  est le séparateur de ligne en mode DOS, le signe \osp \ est le séparateur dans le makefile. Mais vous pouvez avoir les commandes sur une seule ligne à condition d'enlever les séparateurs}
+\hint{Pour une meilleure lisibilité, les lignes trop longues ont été découpées. Le signe \codeline{^}  est le séparateur de ligne en mode DOS, le signe \osp \ est le séparateur dans le makefile. Mais vous pouvez avoir les commandes sur une seule ligne à condition d'enlever les séparateurs}
 
 
-\begin{code}
+\begin{verbatim}
 
 mingw32-make.exe -f test.mak test.exe
 
@@ -59,11 +59,11 @@ mingw32-g++.exe -LC:\PF\wxWidgets2.8\lib\gcc_dll -o bin\Debug\test.exe          
 
 Process terminated with status 0 (0 minutes, 12 seconds)
 0 errors, 0 warnings
-\end{code}
+\end{verbatim}
 
 Le code ci-dessus peut être converti en un makefile ci-dessous. Il est resté délibérément assez proche de la sortie du fichier HTML.
 
-\begin{code}
+\begin{verbatim}
 # test program makefile
 
 Incpath1 = C:\PF\wxWidgets2.8\include
@@ -112,11 +112,11 @@ obj\Debug\resource.coff : C:\Development\test\resource.rc
 #    obj\Debug\testApp.o obj\Debug\testMain.o                                   ^
 #    obj\Debug\resource.res -lwxmsw28ud -mwindows
 
-\end{code}
+\end{verbatim}
 
 J'ai écrit un makefile générique que je n'ai testé que sous Windows Vista mais qui devrait fonctionner sur tout projet commencé comme décrit ci-dessus. Vous devrez changer le nom du projet et ajuster les chemins appropriés (vous n'aurez probablement qu'à changer Ppath et WXpath).
 
-\begin{code}
+\begin{verbatim}  
 
 # Generic program makefile
 # -- assumes that you name your directory with same name as the project file
@@ -161,14 +161,14 @@ $(Opath)\resource.coff : C:\Development\$(Proj)\resource.rc
 
 clean:
     del $(Bpath)\$(Proj).exe $(Obj) $(Opath)\resource.coff
-\end{code}
+\end{verbatim}
 
-\hint{exporter un makefile depuis un projet \codeblocks est possible indirectement. Vous pouvez l'obtenir à partir de l'utilitaire cbp2make (voir sa description dans \pxref{sec:cbp2make} et/ou un exemple d'utilisation via Tool+ \pxref{sec:tool_cbp2make}.}
+\hint{Exporter un makefile depuis un projet \codeblocks est possible indirectement. Vous pouvez l'obtenir à partir de l'utilitaire cbp2make (voir sa description dans \pxref{sec:cbp2make} et/ou un exemple d'utilisation via Tool+ \pxref{sec:tool_cbp2make}.}
 
 
 Une dernière remarque. Une fois que vous avez utilisé un makefile, toute tentative de compiler sans un makefile vous produira de nombreux warnings. La seule façon que j'ai trouvée pour résoudre cela est de réinstaller CB. Si vous avez besoin des deux façons de compiler il est possible d'installer 2 versions de CB.
 
-\hint{c'est une remarque du texte original dans le Wiki. Mais, en tant qu'utilisateur gd\_on, je n'ai jamais observé ce comportement}
+\hint{C'est une remarque du texte original dans le Wiki. Mais, en tant qu'utilisateur gd\_on, je n'ai jamais observé ce comportement}
 
 En général, il n'est pas recommandé d'utiliser un makefile, mais s'il y a de bonnes raisons de le faire, alors vous avez ici ce qu'il faut. 
 

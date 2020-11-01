@@ -89,7 +89,7 @@ Save this file as a header (\textbf{hello.h}) in the same directory as the other
 
 \hint{if the current project has only one build target, this dialog will be skipped.}
 
-Returning to the main source (\textbf{main.cpp}) include the header file and replace the \codeline{cout} function to match the new setup of the project.
+Returning to the main source (\textbf{main.cpp}), include the header file and replace the \codeline{cout} function to match the new setup of the project.
 
 main.cpp
 \begin{lstlisting}
@@ -104,7 +104,7 @@ int main()
 
 Press Ctrl-F9, \menu{Build,Build}, or \menu{Compiler Toolbar,Build (button - the gear)} to compile the project. If the following output is generated in the build log (in the bottom panel) then all steps were followed correctly.
 
-\begin{code}
+\begin{lstlisting}
 -------------- Build: Debug in HelloWorld ---------------
 
 Compiling: main.cpp
@@ -113,7 +113,7 @@ Linking console executable: bin\Debug\HelloWorld.exe
 Output size is 923.25 KB
 Process terminated with status 0 (0 minutes, 0 seconds)
 0 errors, 0 warnings (0 minutes, 0 seconds)
-\end{code}
+\end{lstlisting}
 
 The executable may now be run by either clicking the Run button or hitting Ctrl-F10.
 
@@ -146,23 +146,23 @@ Switch to the \textbf{Build targets} tab. Click \textbf{Add} to create a new bui
 
 The next step is to change the target's settings. Click \textbf{Build options...} to access the settings. The first tab the comes up has a series of compiler flags accessible through check boxes. Select "Strip all symbols from binary" and "Optimize generated code for size". The flags here contain many of the more common options, however, custom arguments may be passed. Switch to the \textbf{Other options} sub-tab and add the following switches:
 
-\begin{code}
+\begin{lstlisting}
 -fno-rtti
 -fno-exceptions
 -ffunction-sections
 -fdata-sections
 -flto
-\end{code}
+\end{lstlisting}
 
 Now switch to the \textbf{Linker settings} tab. The \textbf{Link libraries:} box provides a spot to add various libraries (for example, \textit{wxmsw28u} for the Windows Unicode version of the wxWidgets monolithic dll). This program does not require any such libraries. The custom switches from the previous step require their link-time counterparts. Add
 
-\begin{code}
+\begin{lstlisting}
 -flto
 -Os
 -Wl,--gc-sections
 -shared-libgcc
 -shared-libstdc++
-\end{code}
+\end{lstlisting}
 
 to the \textbf{Other linker options:} tab. (For further details on what these switches do, see the GCC documentation on optimization options and linker options.)
 
@@ -174,7 +174,7 @@ Click \textbf{OK} to accept these changes and return to the previous dialog. Now
 
 The virtual target "Releases" will now be available from the Compiler Toolbar; building this should result in the following output.
 
-\begin{code}
+\begin{lstlisting}
 -------------- Build: Release in HelloWorld ---------------
 
 Compiling: main.cpp
@@ -190,4 +190,4 @@ Linking console executable: bin\ReleaseSmall\HelloWorld.exe
 Output size is 8.00 KB
 Process terminated with status 0 (0 minutes, 1 seconds)
 0 errors, 0 warnings (0 minutes, 1 seconds) 
-\end{code}
+\end{lstlisting}

@@ -11,46 +11,46 @@ A Makefile generation tool for \codeblocks IDE by Mirai Computing. The text of t
 \genterm{Create makefile for a single project or workspace}
 
 Let's assume you have a project "my\_project.cbp" and you need a makefile for this project. In this simplest case all you have to do is:
-\begin{code}
+\begin{lstlisting}
 cbp2make -in my_project.cbp
-\end{code}
+\end{lstlisting}
 
 Same thing applies to workspaces.
-\begin{code}
+\begin{lstlisting}
 cbp2make -in my_projects.workspace
-\end{code}
+\end{lstlisting}
 
 \genterm{Create makefile with another filename}
 By default, "cbp2make" will append ".mak" extension to the project name to compose a filename for makefile.
 If you want to change that, use following command:
 
-\begin{code}
+\begin{lstlisting}
 cbp2make -in my_project.cbp -out Makefile
-\end{code}
+\end{lstlisting}
 
 \genterm{Create makefile for another platform}
 If you are working in GNU/Linux and you want to generate a makefile for Windows or the other way around, you can specify one or more platforms for which you need makefiles.
 
-\begin{code}
+\begin{lstlisting}
 cbp2make -in my_project.cbp -windows
 cbp2make -in my_project.cbp -unix
 cbp2make -in my_project.cbp -unix -windows -mac
 cbp2make -in my_project.cbp --all-os
-\end{code}
+\end{lstlisting}
 "cbp2make" will append ".unix" or ".windows" or ".mac" suffix to makefile name for each platform respectively.
 
 \genterm{Create makefile for multiple projects or workspaces}
 If you have more than one independent project or workspace, you can process them at once, but you will need a text file containing the list of projects, e.g., "projects.lst", with one project filename per line.
 
-\begin{code}
+\begin{lstlisting}
     my_project.cbp
     my_other_project.cbp 
-\end{code}
+\end{lstlisting}
 
 And then you can process them using command:
-\begin{code}
+\begin{lstlisting}
 cbp2make -list -in projects.lst
-\end{code}
+\end{lstlisting}
 
 \subsection{Configuration}
 
@@ -60,10 +60,10 @@ Please, keep in mind that since cbp2make is in early stage of development, an ol
 
 \genterm{Initialization}
 
-\begin{code}
+\begin{lstlisting}
 cbp2make --config options --global
 cbp2make --config options --local
-\end{code}
+\end{lstlisting}
 
 \genterm{Later use}
 
@@ -71,21 +71,21 @@ When cbp2make is invoked, first it tries to load a local configuration file. If 
 
 \genterm{Default lookup order}
 
-\begin{code}
+\begin{lstlisting}
 cbp2make -in project.cbp -out Makefile}
-\end{code}
+\end{lstlisting}
 
 \genterm{Explicitly specified configuration}
 
-\begin{code}
+\begin{lstlisting}
 cbp2make --local -in project.cbp -out Makefile
 cbp2make --global -in project.cbp -out Makefile
-\end{code}
+\end{lstlisting}
 
 \subsection{Command line syntax}
 
 Generate makefile:
-\begin{code}
+\begin{verbatim}
 cbp2make -in <project_file> [-cfg <configuration>] [-out <makefile>]
 [-unix] [-windows] [-mac] [--all-os] [-targets "<target1>[,<target2>[, ...]]"]
 [--flat-objects] [--flat-objpath] [--wrap-objects] [--wrap-options]
@@ -95,88 +95,88 @@ cbp2make -list -in <project_file_list> [-cfg <configuration>]
 [-unix] [-windows] [-mac] [--all-os] [-targets "<target1>[,<target2>[, ...]]"]
 [--flat-objects] [--flat-objpath] [--wrap-objects] [--wrap-options]
 [--with-deps] [--keep-objdir] [--keep-outdir] [--target-case keep|lower|upper]
-\end{code}
+\end{verbatim}
 
 Manage toolchains:
-\begin{code}
+\begin{verbatim}
 cbp2make --config toolchain --add \[-unix|-windows|-mac\] -chain <toolchain>
 cbp2make --config toolchain --remove \[-unix|-windows|-mac\] -chain <toolchain>
-\end{code}
+\end{verbatim}
 
 Manage build tools:
-\begin{code}
+\begin{verbatim}
 cbp2make --config tool --add \[-unix|-windows|-mac\] -chain <toolchain>
          -tool <tool> -type <type> <tool options>
          
 cbp2make --config tool --remove \[-unix|-windows|-mac\] -chain <toolchain>
          -tool <tool>
-\end{code}
+\end{verbatim}
 
 Tool types:      
-\begin{code}
+\begin{verbatim}
     pp=preprocessor as=assembler cc=compiler rc=resource compiler
     sl=static linker dl=dynamic linker el=executable linker
     nl=native linker
-\end{code}
+\end{verbatim}
 
 Tool options (common):
-\begin{code}
+\begin{verbatim}
     -desc <description> -program <executable> -command <command_template>
     -mkv <make_variable> -srcext <source_extensions> -outext <output_extension>
     -quotepath <yes|no> -fullpath <yes|no> -unixpath <yes|no>
-\end{code}
+\end{verbatim}
 
 Tool options (compiler):
-\begin{code}
+\begin{verbatim}
     -incsw <include_switch> -defsw <define_switch> -deps <yes|no>
-\end{code}
+\end{lstlisting}
 
 Tool options (linker):
-\begin{code}
+\begin{verbatim}
     -ldsw <library_dir_switch> -llsw <link_library_switch> -lpfx <library_prefix>
     -lext <library_extension> -objext <object_extension> -lflat <yes|no>
-\end{code}
+\end{verbatim}
 
 Manage platforms:
-\begin{code}
+\begin{verbatim}
 cbp2make --config platform \[-unix|-windows|-mac\] \[-pwd <print_dir_command>\]
          \[-cd <change_dir_command>\] \[-rm <remove_file_command>\]
          \[-rmf <remove_file_forced>\] \[-rmd <remove_dir_command>\]
          \[-cp <copy_file_command>\] \[-mv <move_file_command>\]
          \[-md <make_dir_command>\] \[-mdf <make_dir_forced>\]
          \[-make <default_make_tool>\]         
-\end{code}
+\end{verbatim}
 
 \begin{samepage}
 Manage global compiler variables:
-\begin{code}
+\begin{verbatim}
 cbp2make --config variable --add \[-set <set_name>\] -name <var_name>
         \[-desc <description>\] \[-field <field_name>\] -value <var_value>
         
 cbp2make --config variable --remove \[-set <set_name>\] \[-name <var_name>\]
         \[-field <field_name>\]
-\end{code}
+\end{verbatim}
 \end{samepage}
 
 Manage options:
-\begin{code}
+\begin{verbatim}
 cbp2make --config options --default-options "<options>"    
 cbp2make --config show
-\end{code}
+\end{verbatim}
 
 Common options:
-\begin{code}
+\begin{verbatim}
 cbp2make --local         // use configuration from current directory
 cbp2make --global        // use configuration from home directory
 cbp2make --verbose       // show project information
 cbp2make --quiet         // hide all messages
 cbp2make --help          // display this message
 cbp2make --version       // display version information
-\end{code}
+\end{verbatim}
 
 \genterm{Options}
 
-\begin{code}
+\begin{lstlisting}
 "Makefile generation"
 
     -in <project_file>   // specifies an input file or a list of files;
@@ -219,4 +219,4 @@ cbp2make --version       // display version information
                             output binary file in 'clean' target;
 
     --target-case [keep|lower|upper] // specifies style for makefile targets;
-\end{code}
+\end{lstlisting}

@@ -110,18 +110,18 @@ I hope this is self-explaining :)
 
 Post-build script that copies the output file into the folder \file{C:\osp Program\osp bin} in Windows: 
 
-\begin{code}
+\begin{lstlisting}
 cmd /c copy "$(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" "C:\Program\bin"
-\end{code}
+\end{lstlisting}
 
 Execute the bash script "copyresources.sh" in Linux:
 
-\begin{code}
+\begin{lstlisting}
 /bin/sh copyresources.sh
-\end{code}
+\end{lstlisting}
 
 Create a new directory in the output directory:
 
-\begin{code}
+\begin{lstlisting}
 mkdir $(TARGET_OUTPUT_DIR)/data
-\end{code}  
+\end{lstlisting}  

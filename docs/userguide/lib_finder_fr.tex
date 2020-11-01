@@ -47,9 +47,9 @@ Vous pouvez filtrer les librairies connues de LibFinder en fournissant un filtre
 
 Si vous voulez ajouter une librairie qui n'est pas disponible dans la base de données de LibFinder, vous pouvez utiliser le champ \menu{Librairie inconnue}. Notez que vous devriez entrer le "library's shortcode" (nom court, qui habituellement correspond au nom de variable globale) ou le nom de librairie dans pkg-config. Vous trouverez une liste de noms courts suggérés dans le Wiki de \codeblocks dans \href{http://wiki.codeblocks.org/index.php?title=Recommended_global_variables}{Global Variables}. L'usage de cette option n'est recommandé que lorsqu'on prépare un projet qui doit être généré sur d'autres machines où ce type de librairie existe et y est correctement détectée par LibFinder. Vous pouvez accéder à une variable globale dans \codeblocks comme :
 
-\begin{code}
+\begin{lstlisting}
 $(#GLOBAL_VAR_NAME.include)
-\end{code}
+\end{lstlisting}
 
 Cocher l'option \menu{Ne pas configurer automatiquement} indiquera à LibFinder qu'il ne devrait pas ajouter automatiquement les librairies lors de la compilation. Dans ce cas, LibFinder peut s'invoquer depuis un script de génération. Un exemple d'un tel script est généré et ajouté au projet en appuyant sur  \menu{Ajouter un script de génération manuel}.
 

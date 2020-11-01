@@ -46,13 +46,13 @@ Je vous suggère d'extraire (et d'installer pour GDB si nécessaire) le tout dan
 
 Vous pouvez avoir besoin d'ajouter le répertoire \file{bin} de votre installation MinGW (et/ou MinGW32/MinGW64) à votre variable path. Un moyen simple de faire cela est d'entrer la commande suivante dans une fenêtre DOS :
 
-\begin{cmd}
+\begin{verbatim}
 set path=%PATH%;C:\MinGW32\bin;C:\MinGW32\i686-w64-mingw32\bin;
-\end{cmd}
+\end{verbatim}
 ou (pour une installation en 64 bits) :
-\begin{cmd}
+\begin{verbatim}
 set path=%PATH%;C:\MinGW64\bin;C:\MinGW64\x86_64-w64-mingw32\bin;
-\end{cmd}
+\end{verbatim}
 
 C'est nécessaire pour lancer votre exécutable en dehors du contexte de l'IDE \codeblocks.
 
@@ -105,57 +105,57 @@ Premièrement, assurez-vous que \file{C:\osp MingGW\osp bin} est dans votre vari
 
 Il est temps maintenant de compiler les wxWidgets. Ouvrir une fenêtre de commande DOS et se placer dans le répertoire des wxWidgets :
 
-\begin{cmd}
+\begin{verbatim}
 cd <wxDir>\build\msw
-\end{cmd}
+\end{verbatim}
 
 Nous sommes maintenant au bon endroit. Nous allons d'abord nettoyer les sources :
 
-\begin{cmd}
+\begin{verbatim}
 mingw32-make -f makefile.gcc SHARED=1 MONOLITHIC=1 BUILD=release UNICODE=1 clean
-\end{cmd}
+\end{verbatim}
 
 Maintenant que tout est propre, nous pouvons compiler les wxWidgets :
 
-\begin{cmd}
+\begin{verbatim}
 mingw32-make -f makefile.gcc SHARED=1 MONOLITHIC=1 BUILD=release UNICODE=1
-\end{cmd}
+\end{verbatim}
 
 Si vous utilisez le compilateur TDM-gcc 5.1.0, ou gcc 8.1.0, vous aurez à ajouter sur la même ligne de commande : 
-\begin{cmd}
+\begin{verbatim}
 USE_XRC=1
 CXXFLAGS+="-fpermissive -fno-keep-inline-dllexport -std=gnu++11
  -Wno-deprecated-declarations"
 LDFLAGS="-Wl,--allow-multiple-definition"
-\end{cmd}  
+\end{verbatim}  
 
 Depuis la révision SVN 11701, \codeblocks sous Windows est généré en activant/forçant le support de DIRECT2D (pour une plus rapide et meilleure qualité graphique). La génération de wxWidgets nécessite quelques ajustments à effectuer directement dans le(s) fichier(s) setup.h. Normalement le seul fichier à modifier est dans le sous-répertoire lib, celui créé lors de la première génération de wxWidgets, et utilisé par la suite. Pour une génération par gcc, dll, c'est quelque chose comme : \file{C:\osp wxWidgets-3.1.3\osp lib\osp gcc\_dll\osp mswu\osp wx}.\\
 Vous pouvez simplement modifier la ligne contenant (ligne 1593 dans wxWidgets 3.1.3):
-\begin{code}
+\begin{verbatim}
     #define wxUSE_GRAPHICS_DIRECT2D 0 
-\end{code}
+\end{verbatim}
 par
-\begin{code}
+\begin{verbatim}
     #define wxUSE_GRAPHICS_DIRECT2D 1  
-\end{code}
+\end{verbatim}
 Les autres setup.h peuvent être modifiés, mais ce n'est normalement pas requis.
 
 en option :
-\begin{cmd}
+\begin{verbatim}
 USE_OPENGL=1
 DEBUG_LEVEL=0
-\end{cmd}
+\end{verbatim}
 
 \hint{USE\_OPENGL=1 crée une dll supplémentaire, utilisée si votre programme wxWidgets requiert une fenêtre OpenGL, notamment lorsque vous utilisez wxGLCanvas}
 
 On peut aussi personnaliser le nom des dlls produites par :
-\begin{cmd}
+\begin{verbatim}
 VENDOR=cb
-\end{cmd}
+\end{verbatim}
 ou pour une génération en 64 bits :
-\begin{cmd}
+\begin{verbatim}
 VENDOR=cb_64
-\end{cmd}
+\end{verbatim}
 
 \hint{Si VENDOR n'est pas spécifié, cela revient à VENDOR=custom. VENDOR=cb est utilisé par l'équipe de \codeblocks. Aussi, pour éviter toute confusion, il peut être prudent d'utiliser un autre identifiant de "vendor".} 
 
@@ -165,13 +165,13 @@ Pour générer une version debug, suivez les mêmes étapes et options (le seul 
 
 \begin{itemize}
 \item Nettoyer les précédentes compilations par
-	\begin{cmd}
+	\begin{verbatim}
 	mingw32-make -f makefile.gcc SHARED=1 MONOLITHIC=1 BUILD=debug UNICODE=1 clean
-	\end{cmd}
+	\end{verbatim}
 \item Compiler par
-	\begin{cmd}
+	\begin{verbatim}
 	mingw32-make -f makefile.gcc SHARED=1 MONOLITHIC=1 BUILD=debug UNICODE=1
-	\end{cmd}
+	\end{verbatim}
 \end{itemize}
 
 Ajoutez éventuellement les mêmes options que ci-dessus.
@@ -180,10 +180,10 @@ Bien, regardons maintenant dans le répertoire (\file{\var{wxDir}\osp lib\osp gc
 
 Vous pouvez utiliser strip.exe (distribué avec MinGW) pour réduire la taille des dlls.
 par ex:
-\begin{cmd}
+\begin{verbatim}
 strip ..\..\lib\gcc_dll\wxmsw313u_gcc_cb_64.dll
 strip ..\..\lib\gcc_dll\wxmsw313u_gl_gcc_cb_64.dll
-\end{cmd}
+\end{verbatim}
 
 Bravo! Vous venez de générer les wxWidgets!
 
@@ -204,7 +204,7 @@ Pour générer les parties internes, vous pouvez utiliser le fichier projet de \
 
 Mais on peut aussi créer un espace de travail contenant l'intégralité. On mettra cet espace de travail dans le répertoire principal \file{<cbDir>}. Pour cela, utilisez un éditeur de texte basique et créez un fichier nommé "CbProjects.workspace". Un tel fichier existe déjà dans les versions récentes de C::B. Vous pouvez lui donner le contenu suivant : 
 
-\begin{code}
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
   <Workspace title="CodeBlocks Workspace wx3.1.x">
@@ -266,7 +266,7 @@ Mais on peut aussi créer un espace de travail contenant l'intégralité. On met
     <Project filename="plugins/contrib/ToolsPlus/ToolsPlus_wx31.cbp" />
   </Workspace>
 </CodeBlocks_workspace_file>
-\end{code}
+\end{verbatim}
 
 \hint{Il existe plusieurs variantes de ce fichier, dépendant de l'OS, de la version wxWidgets, d'une génération en 32 ou 64 bits.}
 
@@ -279,7 +279,7 @@ Cette section descrit le processus final de la génération de \codeblocks.
 
 \subsubsection{Windows}
 
-Nous sommes maintenant arrivés à l'étape finale ; notre but ultime. Lancez l'exécutable \codeblocks depuis votre téléchargement de "nightly". Ouvrir le menu Fichier, dans le navigateur cherchez l'espace de travail adéquat et lances-le. Soyez patients pendant que \codeblocks analyse l'ensemble, puis on vous demandera de renseigner 3 ou 4 variables globales. Celles-ci indiqueront à \codeblocks où il trouvera les wxWidgets (pour mémoire : les fichiers d'entêtes et les librairies d'importation) et où il peut trouver les sources de ... \codeblocks. Ceci est nécessaire pour les plug-ins contributifs (ainsi que pour les plug-ins de l'utilisateur), qui doivent savoir où trouver le sdk (Les fichiers d'entêtes de \codeblocks). Dans notre cas, cela peut donner :
+Nous sommes maintenant arrivés à l'étape finale ; notre but ultime. Lancez l'exécutable \codeblocks depuis votre téléchargement de "nightly". Ouvrir le menu Fichier, dans le navigateur cherchez l'espace de travail adéquat et lances-le. Soyez patients pendant que \codeblocks analyse l'ensemble, puis on vous demandera de renseigner 3 ou 4 variables globales. Celles-ci indiqueront à \codeblocks où il trouvera les wxWidgets (pour mémoire : les fichiers d'en-têtes et les librairies d'importation) et où il peut trouver les sources de ... \codeblocks. Ceci est nécessaire pour les plug-ins contributifs (ainsi que pour les plug-ins de l'utilisateur), qui doivent savoir où trouver le sdk (Les fichiers d'en-têtes de \codeblocks). Dans notre cas, cela peut donner :
 \begin{description}
 \item[wx] \var{wxDir} répertoire de base des wxWidgets: le nom de la variable peut être wx31, wx31\_64,...
 \item[cb] \file{\var{cbDir}/src} répertoire contenant les sources de \codeblocks.
@@ -312,19 +312,19 @@ Avec cette fonction la révision SVN de la génération Nightly est mise à jour
 
 Quand on génère sous Linux, les étapes suivantes sont nécessaires. Dans cet exemple nous supposons que vous êtes dans le répertoire source de \codeblocks.  Sous Linux, la variable d'environnement \codeline{PKG_CONFIG_PATH} doit être configurée. Le répertoire \var{prefix} doit contenir le fichier \file{codeblocks.pc}. 
 
-\begin{cmd}
+\begin{verbatim}
 PKG_CONFIG_PATH=$PKG_CONFIG_PATH:<prefix>
-\end{cmd}
+\end{verbatim}
 
 
-\begin{cmd}
+\begin{verbatim}
 sh update_revsion.sh
 ./bootstrap
-./configure --with-contrib=[all | noms des plugins séparés par des virgules]
+./configure --with-contrib=[all | noms des plugins separes par des virgules]
      --prefix=<install-dir>
 make
 make install (en tant que root)
-\end{cmd}
+\end{verbatim}
 
 Vous pouvez aussi générer sous Linux comme sous Windows, avec un fichier workspace. Toutefois, pkg\_config et wx-config doivent être correctement configurés.
 
@@ -340,29 +340,29 @@ Configurer les variables globales via \menu{Paramètres,Variables Globales}.
 
 Pour la variable \codeline{cb}, entrer dans \codeline{base} le répertoire source de \codeblocks.
 
-\begin{cmd}
+\begin{verbatim}
 <cbDir>/codeblocks/src
-\end{cmd}
+\end{verbatim}
 
 \genterm{Variable wx}
 
 Pour la variable \codeline{wx}, entrer dans \codeline{base} le répertoire source de wx : par ex.
 
-\begin{cmd}
+\begin{verbatim}
 C:\wxWidgets-2.8.12
-\end{cmd}
+\end{verbatim}
 
 ou pour générer avec une version plus récente, wx31 (ou wx31\_64)
 
-\begin{cmd}
-C:\wxWidgets-3.1.3
-\end{cmd}
+\begin{verbatim}
+C:\wxWidgets-3.1.4
+\end{verbatim}
 
 Dans le projet \codeblocks, la variable projet \codeline{WX_SUFFIX} est configurée à \codeline{u}. Cela signifie que pendant la génération de \codeblocks l'édition de liens se fera avec la librairie \file{*u\_gcc\_custom.dll} (par défaut). Les générations officielles des nightlies de \codeblocks seront liées avec \file{gcc\_cb.dll}. Pour ce faire, il faut faire comme suit.
 
-\begin{code}
+\begin{verbatim}
 gcc_<VENDOR>.dll
-\end{code}
+\end{verbatim}
 
 La variable \var{VENDOR} est donnée dans le fichier de configuration \file{compiler.gcc} ou via la ligne de commande de l'instruction make, comme montré précédemment. Pour s'assurer qu'une distinction soit possible entre une génération officielle de \codeblocks et celles effectuée par vous-mêmes, la configuration par défaut \codeline{VENDOR=custom} ne devrait pas être changée.
 
@@ -374,7 +374,7 @@ Configurez la variable \codeline{wx} à l'aide des variables globales.
 
 \begin{description}
 \item[base] /usr
-\item[include] /usr/include/wx-2.8 (ou la vesrion installée sur votre machine)
+\item[include] /usr/include/wx-2.8 (ou la version installée sur votre machine)
 \item[lib] /usr/lib
 \end{description}
 
