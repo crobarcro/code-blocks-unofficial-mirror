@@ -56,9 +56,9 @@ XPStyle on
 # CBLauncher tool for portable settings (AppData in the C::B folder).
 !define CB_LAUNCHER
 
-# The following line toggles the admin or user istallation package.
+# The following line toggles the admin or user installation package.
 # Preferred should be the admin installation package, however, for
-# non-admins the user installation packge is the only one working.
+# non-admins the user installation package is the only one working.
 !define CB_ADMIN_INSTALLER
 
 # Notice installer packagers:
@@ -1543,16 +1543,13 @@ SectionGroup "Contrib Plugins" SECGRP_CONTRIB_PLUGINS
         File ${CB_BASE}\wxsmithlib.dll
         File ${CB_BASE}\wxchartctrl.dll
         File ${CB_BASE}\wxcustombutton.dll
-        File ${CB_BASE}\wxdatetimepicker.dll
         File ${CB_BASE}\wxflatnotebook.dll
         File ${CB_BASE}\wximagepanel.dll
         File ${CB_BASE}\wxkwic.dll
         File ${CB_BASE}\wxled.dll
         File ${CB_BASE}\wxmathplot.dll
         File ${CB_BASE}\wxspeedbutton.dll
-!if ${WX_VER} == 28
-        File ${CB_BASE}\wxtreelist.dll
-!endif
+
         SetOutPath $INSTDIR${CB_SHARE_CB}
         File ${CB_BASE}${CB_SHARE_CB}\wxsmith.zip
         File ${CB_BASE}${CB_SHARE_CB}\wxSmithAui.zip
@@ -1987,16 +1984,12 @@ Section "-un.wxSmith plugin" UNSEC_WXSMITH
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\wxsmith.dll
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\wxSmithAui.dll
     Delete /REBOOTOK $INSTDIR${CB_PLUGINS}\wxSmithContribItems.dll
-!if ${WX_VER} == 28
-    Delete /REBOOTOK $INSTDIR\wxtreelist.dll
-!endif
     Delete /REBOOTOK $INSTDIR\wxspeedbutton.dll
     Delete /REBOOTOK $INSTDIR\wxmathplot.dll
     Delete /REBOOTOK $INSTDIR\wxled.dll
     Delete /REBOOTOK $INSTDIR\wxkwic.dll
     Delete /REBOOTOK $INSTDIR\wximagepanel.dll
     Delete /REBOOTOK $INSTDIR\wxflatnotebook.dll
-    Delete /REBOOTOK $INSTDIR\wxdatetimepicker.dll
     Delete /REBOOTOK $INSTDIR\wxcustombutton.dll
     Delete /REBOOTOK $INSTDIR\wxchartctrl.dll
     Delete /REBOOTOK $INSTDIR${CB_SHARE_CB}\wxsmith.zip
