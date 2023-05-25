@@ -48,7 +48,7 @@ XPStyle on
 # compiler suite (including GDB) or not. Uncomment to include MinGW.
 #!define MINGW_BUNDLE
 
-# The following line toggles whether the MinGw DLL#s shall be included
+# The following line toggles whether the MinGw DLL's shall be included
 # in the release. These are needed, if C::B is not compiled statically.
 !define MINGW_DLLS
 
@@ -56,9 +56,9 @@ XPStyle on
 # CBLauncher tool for portable settings (AppData in the C::B folder).
 !define CB_LAUNCHER
 
-# The following line toggles the admin or user istallation package.
+# The following line toggles the admin or user installation package.
 # Preferred should be the admin installation package, however, for
-# non-admins the user installation packge is the only one working.
+# non-admins the user installation package is the only one working.
 !define CB_ADMIN_INSTALLER
 
 # Notice installer packagers:
